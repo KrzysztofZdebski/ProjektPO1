@@ -1,0 +1,54 @@
+@startuml
+!define TableView     javafx.scene.control.TableView
+!define TableColumn   javafx.scene.control.TableColumn
+!define MenuBar       javafx.scene.control.MenuBar
+!define Menu          javafx.scene.control.Menu
+!define MenuItem      javafx.scene.control.MenuItem
+!define VBox          javafx.scene.layout.VBox
+!define HBox          javafx.scene.layout.HBox
+!define Button        javafx.scene.control.Button
+!define Label         javafx.scene.control.Label
+!define TextInputDialog javafx.scene.control.TextInputDialog
+!define Alert         javafx.scene.control.Alert
+!define RadioMenuItem javafx.scene.control.RadioMenuItem
+
+class Controller {
+    -TableView<Event> eventsTable
+    -TableColumn<Event, String> eventNameColumn
+    -TableColumn<Event, String> eventDateColumn
+    -TableColumn<Event, String> participantsColumn
+    -TableColumn<Event, String> betColumn
+    -Menu clientMenu
+    -ObservableList<Event> events
+    -ObservableList<String> clients
+    -String selectedClient
+    +void initialize()
+    +void handlePlaceBet()
+    +void handleClearSelection()
+    +void handleAddClient()
+    +void handleRemoveClient()
+    +void updateClientMenu()
+    +void showAlert(String title, String content)
+}
+
+class Event {
+    -String eventName
+    -String eventDate
+    -String participants
+    -String bet
+    +StringProperty eventNameProperty()
+    +StringProperty eventDateProperty()
+    +StringProperty participantsProperty()
+    +StringProperty betProperty()
+}
+
+Controller --> TableView
+Controller --> TableColumn
+Controller --> Menu
+Controller --> ObservableList
+Controller --> String
+
+TableView --> Event
+TableColumn --> Event
+
+@enduml

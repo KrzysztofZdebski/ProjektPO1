@@ -1,0 +1,21 @@
+@startuml
+actor User
+
+User -> Controller: handleAddClient()
+activate Controller
+
+Controller -> TextInputDialog: new TextInputDialog()
+activate TextInputDialog
+User -> TextInputDialog: enter client name
+TextInputDialog -> Controller: client name
+deactivate TextInputDialog
+
+Controller -> Controller: check if client exists
+alt client does not exist
+    Controller -> ObservableList: add(client)
+    Controller -> Controller: updateClientMenu()
+else client exists
+    Controller -> Controller: showAlert("Client already exists")
+end
+deactivate Controller
+@enduml

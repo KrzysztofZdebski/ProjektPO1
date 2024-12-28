@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.MainWindowController">
+  <padding>
+    <Insets top="10" right="10" bottom="10" left="10"/>
+  </padding>
+
+  <children>
+    <MenuBar>
+      <menus>
+        <Menu text="Client" fx:id="clientMenu">
+          <items>
+            <!-- Client menu items will be dynamically added here -->
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+
+    <HBox spacing="10">
+      <Button text="Add Client" onAction="#handleAddClient"/>
+      <Button text="Remove Selected Client" onAction="#handleRemoveClient"/>
+    </HBox>
+
+    <Label text="Upcoming Events" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="eventsTable" prefHeight="400" prefWidth="600">
+      <columns>
+        <TableColumn fx:id="eventNameColumn" text="Event Name"/>
+        <TableColumn fx:id="eventDateColumn" text="Date"/>
+        <TableColumn fx:id="participantsColumn" text="Participants"/>
+        <TableColumn fx:id="betColumn" text="Place Bet"/>
+      </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+      <Button text="Place Bet" onAction="#handlePlaceBet"/>
+      <Button text="Clear Selection" onAction="#handleClearSelection"/>
+    </HBox>
+  </children>
+</VBox>
