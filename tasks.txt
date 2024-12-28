@@ -1,0 +1,17 @@
+Baza danych			bartek
+	przykladowe dane
+Klasa Client			Bartek
+	na co ile postawil
+Klasa Event			Krzysiek
+	kursy
+	ile postawione
+	Kategorie
+Poporawic UI			Krzysiek
+	Dodawac nowe mecze
+
+
+
+Saldo klienta
+Sprawdzanie daty (licznik czasu, wyplacanie pieniedzy)
+
+Promocje
