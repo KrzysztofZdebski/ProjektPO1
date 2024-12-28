@@ -2,6 +2,7 @@ package org.main.gamblingapp;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.json.simple.JSONObject;
 
 public class Event {
     private final StringProperty eventName;
