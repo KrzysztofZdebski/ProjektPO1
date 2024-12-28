@@ -1,4 +1,4 @@
-Baza danych			bartek
+Baza danych			Bartek
 	przykladowe dane
 Klasa Client			Bartek
 	na co ile postawil
@@ -7,7 +7,7 @@ Klasa Event			Krzysiek
 	ile postawione
 	Kategorie
 Poporawic UI			Krzysiek
-	Dodawac nowe mecze
+	Dodawac/usuwanie nowe mecze
 
 
 
@@ -15,3 +15,18 @@ Saldo klienta
 Sprawdzanie daty (licznik czasu, wyplacanie pieniedzy)
 
 Promocje
+
+
+
+Event
+	String name
+	String date
+	String participants
+	int bet
+	String category
+
+Client
+	String name
+	int saldo
+	
+	
