@@ -1,14 +1,18 @@
 package org.main.gamblingapp;
 
+import Interfaces.Listener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Event {
     private final StringProperty eventName;
     private final StringProperty eventDate;
     private final StringProperty participants;
     private final StringProperty bet;
+    private final List<Listener> listenerList = new ArrayList<>();
 
     public Event(String eventName, String eventDate, String participants, String bet) {
         this.eventName = new SimpleStringProperty(eventName);
