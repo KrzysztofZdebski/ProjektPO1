@@ -1,0 +1,12 @@
+[
+    {"clientName": "Jan Kowalski", "clientAccBalance":"300"},
+    {"clientName": "Anna Nowak", "clientAccBalance":"450"},
+    {"clientName": "Piotr Wiśniewski", "clientAccBalance":"200"},
+    {"clientName": "Maria Zawadzka", "clientAccBalance":"600"},
+    {"clientName": "Tomasz Malinowski", "clientAccBalance":"800"},
+    {"clientName": "Ewa Dąbrowska", "clientAccBalance":"550"},
+    {"clientName": "Krzysztof Kamiński", "clientAccBalance":"700"},
+    {"clientName": "Agnieszka Wójcik", "clientAccBalance":"400"},
+    {"clientName": "Paweł Lewandowski", "clientAccBalance":"150"},
+    {"clientName": "Katarzyna Zielińska", "clientAccBalance":"500"}
+]
