@@ -59,11 +59,8 @@ public class Event {
 
     public String getEventName() {return eventName.get();}
     public StringProperty eventNameProperty() {return eventName;}
-    public String getEventDate() {return eventDate.get();}
     public StringProperty eventDateProperty() {return eventDate;}
-//    public String getParticipants() {return participants.get();}
     public ObservableList<String> participantsList() {return participants;}
-//    public String getBet() {return bet.get();}
     public ObservableList<Integer> betList() {return bet;}
     public ObservableList<Double> oddsList() {return odds;}
 

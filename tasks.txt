@@ -2,10 +2,6 @@ Baza danych			Bartek
 	przykladowe dane
 Klasa Client			Bartek
 	na co ile postawil
-Klasa Event			Krzysiek
-	Kategorie
-Poporawic UI			Krzysiek
-	Dodawac/usuwanie nowe mecze
 
 
 
