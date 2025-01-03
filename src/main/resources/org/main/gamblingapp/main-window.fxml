@@ -34,7 +34,8 @@
         <TableColumn fx:id="eventNameColumn" text="Event Name"/>
         <TableColumn fx:id="eventDateColumn" text="Date"/>
         <TableColumn fx:id="participantsColumn" text="Participants"/>
-        <TableColumn fx:id="betColumn" text="Place Bet"/>
+        <TableColumn fx:id="betColumn" text="Bets"/>
+        <TableColumn fx:id="oddsColumn" text="Odds"/>
       </columns>
     </TableView>
 

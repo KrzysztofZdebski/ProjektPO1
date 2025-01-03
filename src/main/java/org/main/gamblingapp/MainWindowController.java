@@ -1,12 +1,16 @@
 package org.main.gamblingapp;
 
+import Interfaces.Listener;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
-public class MainWindowController {
+import java.util.Objects;
+
+public class MainWindowController implements Listener {
 
     @FXML
     private TableView<Event> eventsTable;
@@ -18,24 +22,29 @@ public class MainWindowController {
     private TableColumn<Event, String> participantsColumn;
     @FXML
     private TableColumn<Event, String> betColumn;
+    @FXML
+    private TableColumn<Event,String> oddsColumn;
 
     @FXML
     private Menu clientMenu;
 
-    private ObservableList<Event> events = FXCollections.observableArrayList();
-    private ObservableList<String> clients = FXCollections.observableArrayList();
+    private final ObservableList<Event> events = FXCollections.observableArrayList();
+    private final ObservableList<String> clients = FXCollections.observableArrayList();
     private String selectedClient;
 
     @FXML
     private void initialize() {
         eventNameColumn.setCellValueFactory(cellData -> cellData.getValue().eventNameProperty());
         eventDateColumn.setCellValueFactory(cellData -> cellData.getValue().eventDateProperty());
-        participantsColumn.setCellValueFactory(cellData -> cellData.getValue().participantsProperty());
-        betColumn.setCellValueFactory(cellData -> cellData.getValue().betProperty());
+        participantsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().participantsList().getFirst() + " vs " + cellData.getValue().participantsList().get(1)));
+        betColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().betList().getFirst() + " | " + cellData.getValue().betList().get(1)));
+        oddsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().oddsList().getFirst() + " | " + cellData.getValue().oddsList().get(1)));
 
         // Add dummy data to events
-        events.add(new Event("Event 1", "2024-01-01", "Participant A vs Participant B", "Bet Button Here"));
-        events.add(new Event("Event 2", "2024-01-02", "Participant C vs Participant D", "Bet Button Here"));
+        events.add(new Event("Event 1", "2024-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
+        events.getFirst().addListener(this);
+        events.add(new Event("Event 2", "2024-01-02", new String[]{"Participant C", "Participant D"}, new Integer[]{0,100}));
+        events.get(1).addListener(this);
 
         eventsTable.setItems(events);
 
@@ -62,6 +71,7 @@ public class MainWindowController {
     @FXML
     private void handleClearSelection() {
         eventsTable.getSelectionModel().clearSelection();
+        events.get(1).addBet("Participant C",10);
     }
 
     @FXML
@@ -110,6 +120,7 @@ public class MainWindowController {
 
             clientMenu.getItems().add(menuItem);
         }
+        update();
     }
 
     private void showAlert(String title, String content) {
@@ -118,5 +129,10 @@ public class MainWindowController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void update() {
+        eventsTable.refresh();
+        clientMenu.setText(Objects.equals(selectedClient, "") ? "Client" : selectedClient);
     }
 }

@@ -3,53 +3,79 @@ package org.main.gamblingapp;
 import Interfaces.Listener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.round;
+
 public class Event {
     private final StringProperty eventName;
     private final StringProperty eventDate;
-    private final StringProperty participants;
-    private final StringProperty bet;
-    private final List<Listener> listenerList = new ArrayList<>();
+    private final ObservableList<String> participants = FXCollections.observableArrayList();
+    private final ObservableList<Integer> bet = FXCollections.observableArrayList();
+    private final ObservableList<Double> odds = FXCollections.observableArrayList();
+    private final List<Listener> listeners = new ArrayList<>();
+    private final Double maxOdds = 10.0;
+    private final double ownerMargin = 1.05;
 
-    public Event(String eventName, String eventDate, String participants, String bet) {
+    public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
+        if(participants.length != 2 || bet.length != 2) throw new IllegalArgumentException();
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDate = new SimpleStringProperty(eventDate);
-        this.participants = new SimpleStringProperty(participants);
-        this.bet = new SimpleStringProperty(bet);
+        this.participants.addAll(FXCollections.observableArrayList(participants));
+        this.bet.addAll(FXCollections.observableArrayList(bet));
+        this.odds.addAll(FXCollections.observableArrayList(0.0, 0.0));
+        countOdds();
+        notifyListeners();
     }
 
-    public String getEventName() {
-        return eventName.get();
+    private void countOdds() {
+        if(bet.getFirst() == 0 || bet.getLast() == 0){
+            if(bet.getFirst() == 0 && bet.getLast() == 0){
+                odds.addAll(FXCollections.observableArrayList(1.0, 1.0));
+                return;
+            }
+            odds.set(bet.getFirst() == 0 ? 0 : 1, maxOdds);
+            odds.set(bet.getFirst() == 0 ? 1 : 0, 1.0);
+            return;
+        }
+        double totalBet = 0;
+        for(Integer i : bet) {totalBet += i;}
+        for(int i = 0; i < bet.size(); i++) {
+            double calcOdds = (double) round(100 * ownerMargin * totalBet / bet.get(i)) / 100.0;
+            odds.set(i, maxOdds > calcOdds ? calcOdds : maxOdds);
+        }
     }
 
-    public StringProperty eventNameProperty() {
-        return eventName;
+    public void addBet(String participant, int bet) {
+        int participantIdx = participants.indexOf(participant);
+        this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
+        countOdds();
+        notifyListeners();
     }
 
-    public String getEventDate() {
-        return eventDate.get();
-    }
+    public String getEventName() {return eventName.get();}
+    public StringProperty eventNameProperty() {return eventName;}
+    public String getEventDate() {return eventDate.get();}
+    public StringProperty eventDateProperty() {return eventDate;}
+//    public String getParticipants() {return participants.get();}
+    public ObservableList<String> participantsList() {return participants;}
+//    public String getBet() {return bet.get();}
+    public ObservableList<Integer> betList() {return bet;}
+    public ObservableList<Double> oddsList() {return odds;}
 
-    public StringProperty eventDateProperty() {
-        return eventDate;
+    public void addListener(Listener listener) {
+        listeners.add(listener);
     }
-
-    public String getParticipants() {
-        return participants.get();
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
     }
-
-    public StringProperty participantsProperty() {
-        return participants;
-    }
-
-    public String getBet() {
-        return bet.get();
-    }
-
-    public StringProperty betProperty() {
-        return bet;
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
     }
 }
