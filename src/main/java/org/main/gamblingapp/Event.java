@@ -18,7 +18,7 @@ public class Event {
     private final ObservableList<Integer> bet = FXCollections.observableArrayList();
     private final ObservableList<Double> odds = FXCollections.observableArrayList();
     private final List<Listener> listeners = new ArrayList<>();
-    private final Double maxOdds = 10.0;
+    private final double maxOdds = 10.0;
     private final double ownerMargin = 1.05;
 
     public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
@@ -46,7 +46,7 @@ public class Event {
         for(Integer i : bet) {totalBet += i;}
         for(int i = 0; i < bet.size(); i++) {
             double calcOdds = (double) round(100 * ownerMargin * totalBet / bet.get(i)) / 100.0;
-            odds.set(i, maxOdds > calcOdds ? calcOdds : maxOdds);
+            odds.set(i, Math.min(maxOdds, calcOdds));
         }
     }
 
