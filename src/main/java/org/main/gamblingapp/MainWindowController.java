@@ -97,12 +97,19 @@ public class MainWindowController implements Listener {
     }
 
     @FXML
-    private void handlePlaceBet() {
+    private void handlePlaceBet() throws IOException {
         Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
         if (selectedEvent != null) {
             if (selectedClient != null) {
-                // Place bet logic here
-                System.out.println("Placing bet on: " + selectedEvent.getEventName() + " for client: " + selectedClient);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/main/gamblingapp/new-bet-window.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(loader.load()));
+                stage.setTitle("Add New Bet");
+                stage.show();
+                NewBetWindowController newBetWindowController = loader.getController();
+                newBetWindowController.setMainWindowController(this);
+                newBetWindowController.setSelectedEvent(selectedEvent);
+                newBetWindowController.setSelectedClient(selectedClient);
             } else {
                 showAlert("No client selected", "Please select a client before placing a bet.");
             }
@@ -198,6 +205,11 @@ public class MainWindowController implements Listener {
 
     public void addEvent(Event event) {
         events.add(event);
+        update();
+    }
+
+    public void addBet(Event event, int bet, String team) {
+        event.addBet(team, bet);
         update();
     }
 }
