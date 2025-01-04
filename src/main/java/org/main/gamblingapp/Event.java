@@ -6,6 +6,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Event {
     private final List<Listener> listeners = new ArrayList<>();
     private final double maxOdds = 10.0;
     private final double ownerMargin = 1.05;
+    private Boolean finished = false;
 
     public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
         if(participants.length != 2 || bet.length != 2) throw new IllegalArgumentException();
@@ -29,6 +32,7 @@ public class Event {
         this.bet.addAll(FXCollections.observableArrayList(bet));
         this.odds.addAll(FXCollections.observableArrayList(0.0, 0.0));
         countOdds();
+        checkDate();
         notifyListeners();
     }
 
@@ -49,21 +53,19 @@ public class Event {
             odds.set(i, Math.min(maxOdds, calcOdds));
         }
     }
-
     public void addBet(String participant, int bet) {
         int participantIdx = participants.indexOf(participant);
         this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
         countOdds();
         notifyListeners();
     }
-
-    public String getEventName() {return eventName.get();}
-    public StringProperty eventNameProperty() {return eventName;}
-    public StringProperty eventDateProperty() {return eventDate;}
-    public ObservableList<String> participantsList() {return participants;}
-    public ObservableList<Integer> betList() {return bet;}
-    public ObservableList<Double> oddsList() {return odds;}
-
+    public void checkDate(){
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(eventDate.get(), formatter);
+        finished = today.isAfter(date);
+        notifyListeners();
+    }
     public void addListener(Listener listener) {
         listeners.add(listener);
     }
@@ -75,4 +77,11 @@ public class Event {
             listener.update();
         }
     }
+
+    public StringProperty eventNameProperty() {return eventName;}
+    public StringProperty eventDateProperty() {return eventDate;}
+    public ObservableList<String> participantsList() {return participants;}
+    public ObservableList<Integer> betList() {return bet;}
+    public ObservableList<Double> oddsList() {return odds;}
+    public Boolean isFinished() {return finished;}
 }

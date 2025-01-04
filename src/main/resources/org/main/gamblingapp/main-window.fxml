@@ -38,13 +38,15 @@
         <TableColumn fx:id="eventDateColumn" text="Date" />
         <TableColumn fx:id="participantsColumn" text="Participants" />
         <TableColumn fx:id="betColumn" text="Bets" />
-        <TableColumn fx:id="oddsColumn" text="Odds" />
+          <TableColumn fx:id="oddsColumn" text="Odds" />
+          <TableColumn fx:id="finishedColumn" text="Is finished?" />
       </columns>
     </TableView>
 
     <HBox alignment="CENTER" spacing="10">
       <Button onAction="#handlePlaceBet" text="Place Bet" />
       <Button onAction="#handleClearSelection" text="Clear Selection" />
+         <Button onAction="#handleCheckDate" mnemonicParsing="false" text="Check Date" />
     </HBox>
   </children>
 </VBox>

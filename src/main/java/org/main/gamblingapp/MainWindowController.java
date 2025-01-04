@@ -4,6 +4,7 @@ import Interfaces.Listener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,6 +31,8 @@ public class MainWindowController implements Listener {
     private TableColumn<Event, String> betColumn;
     @FXML
     private TableColumn<Event,String> oddsColumn;
+    @FXML
+    private TableColumn<Event, String> finishedColumn;
 
     @FXML
     private ComboBox<String> clientBox;
@@ -46,6 +49,7 @@ public class MainWindowController implements Listener {
         participantsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().participantsList().getFirst() + " vs " + cellData.getValue().participantsList().get(1)));
         betColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().betList().getFirst() + " | " + cellData.getValue().betList().get(1)));
         oddsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().oddsList().getFirst() + " | " + cellData.getValue().oddsList().get(1)));
+        finishedColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isFinished().toString()));
 
 
         // Add dummy data to events
@@ -63,10 +67,10 @@ public class MainWindowController implements Listener {
         clients.addAll("Client 1", "Client 2", "Client 3");
 
         clientBox.setItems(clients);
-        clientBox.setOnAction(event -> update());
+        clientBox.setOnAction(_ -> update());
         categoryBox.setItems(categories);
         categoryBox.getSelectionModel().select(categories.getFirst());
-        categoryBox.setOnAction(event -> update());
+        categoryBox.setOnAction(_ -> update());
         categoryBox.setCellFactory(new Callback<>() {
             @Override
             public ListCell<Category> call(ListView<Category> param) {
@@ -100,6 +104,10 @@ public class MainWindowController implements Listener {
     private void handlePlaceBet() throws IOException {
         Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
         if (selectedEvent != null) {
+            if(selectedEvent.isFinished()){
+                showAlert("Event finished", "This event has already finished.");
+                return;
+            }
             if (selectedClient != null) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/main/gamblingapp/new-bet-window.fxml"));
                 Stage stage = new Stage();
@@ -211,5 +219,13 @@ public class MainWindowController implements Listener {
     public void addBet(Event event, int bet, String team) {
         event.addBet(team, bet);
         update();
+    }
+
+    public void handleCheckDate() {
+        for(Category category : categories) {
+            for(Event event : category.getEvents()) {
+                event.checkDate();
+            }
+        }
     }
 }
