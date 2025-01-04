@@ -63,27 +63,27 @@ public class MainWindowController implements Listener {
         clients.addAll("Client 1", "Client 2", "Client 3");
 
         clientBox.setItems(clients);
-        clientBox.setOnAction(event -> {update();});
+        clientBox.setOnAction(event -> update());
         categoryBox.setItems(categories);
         categoryBox.getSelectionModel().select(categories.getFirst());
-        categoryBox.setOnAction(event -> {update();});
-        categoryBox.setCellFactory(new Callback<ListView<Category>, ListCell<Category>>(){
+        categoryBox.setOnAction(event -> update());
+        categoryBox.setCellFactory(new Callback<>() {
             @Override
             public ListCell<Category> call(ListView<Category> param) {
-                return new ListCell<Category>() {
+                return new ListCell<>() {
                     @Override
                     protected void updateItem(Category item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
                             setText(null);
-                        }else{
+                        } else {
                             setText(item.getCategoryName());
                         }
                     }
                 };
             }
         });
-        categoryBox.setButtonCell(new ListCell<Category>() {
+        categoryBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Category item, boolean empty) {
                 super.updateItem(item, empty);

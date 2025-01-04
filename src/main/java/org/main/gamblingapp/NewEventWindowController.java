@@ -1,10 +1,6 @@
 package org.main.gamblingapp;
 
-import com.sun.tools.javac.Main;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -29,11 +25,11 @@ public class NewEventWindowController {
     public void createEvent() {
         try{
             String eventName = eventNameTextField.getText();
-            String fisrtTeam = fisrtTeamTextField.getText();
+            String firstTeam = fisrtTeamTextField.getText();
             String secondTeam = secondTeamTextField.getText();
             String date = datePicker.getValue().toString();
-            if(eventName.isEmpty() || fisrtTeam.isEmpty() || secondTeam.isEmpty()) {throw new NullPointerException();}
-            mainWindowController.addEvent(new Event(eventName, date, new String[]{fisrtTeam, secondTeam}, new Integer[]{0,0}));
+            if(eventName.isEmpty() || firstTeam.isEmpty() || secondTeam.isEmpty()) {throw new NullPointerException();}
+            mainWindowController.addEvent(new Event(eventName, date, new String[]{firstTeam, secondTeam}, new Integer[]{0,0}));
             cancel();
         }catch(NumberFormatException e){
             mainWindowController.showAlert("Incorrect values", "Please enter a valid values");
