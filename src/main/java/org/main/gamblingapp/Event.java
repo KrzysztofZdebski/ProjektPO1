@@ -88,4 +88,5 @@ public class Event {
     public ObservableList<Double> oddsList() {return odds;}
     public boolean isFinished() {return finished;}
     public String getTimeLeft() {return timeLeft;}
+    public String getEventName() {return eventName.get();}
 }

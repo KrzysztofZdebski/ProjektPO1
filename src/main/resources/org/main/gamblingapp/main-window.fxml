@@ -19,6 +19,8 @@
          <children>
             <ComboBox fx:id="clientBox" prefWidth="150.0" promptText="Choose a client" />
             <ComboBox fx:id="categoryBox" prefWidth="150.0" promptText="Chose a category" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="82.0" text="Client Balance" />
+            <Label fx:id="balanceLabel" alignment="CENTER" prefHeight="25.0" prefWidth="90.0" text="0" />
          </children>
       </HBox>
 
@@ -46,7 +48,8 @@
     <HBox alignment="CENTER" spacing="10">
       <Button onAction="#handlePlaceBet" text="Place Bet" />
       <Button onAction="#handleClearSelection" text="Clear Selection" />
-         <Button onAction="#handleCheckDate" mnemonicParsing="false" text="Check Date" />
+         <Button mnemonicParsing="false" onAction="#handleCheckDate" text="Check Date" />
+         <Button onAction="#addBalance" mnemonicParsing="false" text="Add Money" />
     </HBox>
   </children>
 </VBox>

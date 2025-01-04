@@ -27,7 +27,8 @@ import javafx.util.Callback;
 import java.io.IOException;
 
 public class MainWindowController implements Listener {
-
+    @FXML
+    private Label balanceLabel;
     @FXML
     private ComboBox<Category> categoryBox;
     @FXML
@@ -46,12 +47,12 @@ public class MainWindowController implements Listener {
     private TableColumn<Event, String> finishedColumn;
 
     @FXML
-    private ComboBox<String> clientBox;
+    private ComboBox<Client> clientBox;
 
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
     private ObservableList<Event> events = FXCollections.observableArrayList();
-    private ObservableList<String> clients = FXCollections.observableArrayList();
-    private String selectedClient;
+    private ObservableList<Client> clients = FXCollections.observableArrayList();
+    private Client selectedClient;
 
     @FXML
     private void initialize() {
@@ -67,7 +68,7 @@ public class MainWindowController implements Listener {
 
 
         // Add dummy data to events
-        events.add(new Event("Event 1", "2024-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
+        events.add(new Event("Event 1", "2026-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
         events.getFirst().addListener(this);
         events.add(new Event("Event 2", "2024-01-02", new String[]{"Participant C", "Participant D"}, new Integer[]{0,100}));
         events.get(1).addListener(this);
@@ -78,10 +79,38 @@ public class MainWindowController implements Listener {
         eventsTable.getSortOrder().add(eventDateColumn);
 
         // Add dummy data to clients
-        clients.addAll("Client 1", "Client 2", "Client 3");
+        clients.addAll(new Client("Client 1",100), new Client("Client 2",200));
 
         clientBox.setItems(clients);
         clientBox.setOnAction(_ -> update());
+        clientBox.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Client> call(ListView<Client> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Client item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.getClientName());
+                        }
+                    }
+                };
+            }
+        });
+        clientBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Client item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getClientName());
+                }
+            }
+        });
+
         categoryBox.setItems(categories);
         categoryBox.getSelectionModel().select(categories.getFirst());
         categoryBox.setOnAction(_ -> update());
@@ -153,12 +182,14 @@ public class MainWindowController implements Listener {
         dialog.setContentText("Client name:");
 
         dialog.showAndWait().ifPresent(clientName -> {
-            if (!clients.contains(clientName)) {
-                clients.add(clientName);
-                update();
-            } else {
-                showAlert("Client already exists", "A client with this name already exists.");
+            for(Client client : clients) {
+                if(client.equals(clientName)) {
+                    showAlert("Client already exists", "A client with this name already exists.");
+                    return;
+                }
             }
+            clients.add(new Client(clientName,0));
+            update();
         });
     }
 
@@ -222,6 +253,11 @@ public class MainWindowController implements Listener {
         eventsTable.setItems(events);
         eventsTable.refresh();
         eventsTable.sort();
+        if(selectedClient != null) {
+            balanceLabel.setText(Integer.toString(selectedClient.getClientAccBalance()));
+        }else{
+            balanceLabel.setText("0");
+        }
     }
 
     public void addEvent(Event event) {
@@ -272,5 +308,28 @@ public class MainWindowController implements Listener {
         }
 
            updateClientMenu();*/
+    }
+
+    public void addBalance() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add balance");
+        dialog.setHeaderText("Add balance");
+        dialog.setContentText("Balance to add:");
+
+        dialog.showAndWait().ifPresent(balanceStr -> {
+            int balance;
+            try{
+                balance = Integer.parseInt(balanceStr);
+            }catch(NumberFormatException e){
+                showAlert("Invalid balance", "Please enter a valid balance.");
+                return;
+            }
+            if(balance <= 0){
+                showAlert("Invalid balance", "Please enter a valid balance.");
+                return;
+            }
+            selectedClient.addBalance(balance);
+            update();
+        });
     }
 }

@@ -17,13 +17,17 @@ public class Client{
     public int getClientAccBalance() {
         return clientAccBalance;
     }
-    public void placeBet(Event event, int amount) {
+    public void placeBet(Event event, int amount) throws IllegalArgumentException {
         if (amount > clientAccBalance) {
-            System.out.println("You don't have enough money to make a bet");
+//            System.out.println("You don't have enough money to make a bet");
+            throw new IllegalArgumentException("Amount must be lower than the client balance");
         } else {
             clientAccBalance -= amount;
             bets.add(new Bet(event, amount));
         }
+    }
+    public void addBalance(int amount) {
+        clientAccBalance += amount;
     }
 
     public void showBets() {
@@ -37,22 +41,8 @@ public class Client{
         }
     }
 
-    private static class Bet {
-        private Event event;
-        private int amount;
-
-        public Bet(Event event, int amount) {
-            this.event = event;
-            this.amount = amount;
-        }
-
-        public Event getEvent() {
-            return event;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
+    public boolean equals(String clientName) {
+        return this.clientName.equals(clientName);
     }
 }
 
