@@ -9,32 +9,32 @@ class MainWindowController {
   + ObservableList<String> clients
   + String selectedClient
   --
-  + void initialize()
-  + void handlePlaceBet()
-  + void handleClearSelection()
-  + void handleAddClient()
-  + void handleRemoveClient()
-  + void handleNewEvent()
-  + void handleRemoveEvent()
-  + void handleNewCategory()
-  + void showAlert(String title, String content)
-  + void update()
-  + void addEvent(Event event)
-  + void addBet(Event event, int bet, String team)
+  +  initialize()
+  +  handlePlaceBet()
+  +  handleClearSelection()
+  +  handleAddClient()
+  +  handleRemoveClient()
+  +  handleNewEvent()
+  +  handleRemoveEvent()
+  +  handleNewCategory()
+  +  showAlert(String title, String content)
+  +  update()
+  +  addEvent(Event event)
+  +  addBet(Event event, int bet, String team)
 }
 
 class NewBetWindowController {
   + ComboBox<String> teamBox
   + TextField betAmountTextField
-  + MainWindowController mainWindowController
+  + MainWindowController parentController
   + Event selectedEvent
   + String selectedClient
   --
-  + void handleNewBet()
-  + void cancel()
-  + void setMainWindowController(MainWindowController controller)
-  + void setSelectedEvent(Event event)
-  + void setSelectedClient(String client)
+  +  handleNewBet()
+  +  cancel()
+  +  setMainWindowController(MainWindowController controller)
+  +  setSelectedEvent(Event event)
+  +  setSelectedClient(String client)
 }
 
 class NewEventWindowController {
@@ -42,11 +42,11 @@ class NewEventWindowController {
   + TextField fisrtTeamTextField
   + TextField secondTeamTextField
   + DatePicker datePicker
-  + MainWindowController mainWindowController
+  + MainWindowController parentController
   --
-  + void cancel()
-  + void createEvent()
-  + void setParentController(MainWindowController controller)
+  +  cancel()
+  +  createEvent()
+  +  setParentController(MainWindowController controller)
 }
 
 class Event {
@@ -59,9 +59,9 @@ class Event {
   - final double maxOdds
   - final double ownerMargin
   --
-  + void addBet(String participant, int bet)
-  + void addListener(Listener listener)
-  + void removeListener(Listener listener)
+  +  addBet(String participant, int bet)
+  +  addListener(Listener listener)
+  +  removeListener(Listener listener)
   + StringProperty eventNameProperty()
 }
 
@@ -69,9 +69,9 @@ class Category {
   + ObservableList<Event> events
   + String categoryName
   --
-  + boolean equals(String str)
-  + String getCategoryName()
-  + ObservableList<Event> getEvents()
+  +  equals(String str)
+  +  getCategoryName()
+  +  getEvents()
 }
 
 MainWindowController --> NewBetWindowController : uses
