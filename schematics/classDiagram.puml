@@ -1,54 +1,85 @@
 @startuml
-!define TableView     javafx.scene.control.TableView
-!define TableColumn   javafx.scene.control.TableColumn
-!define MenuBar       javafx.scene.control.MenuBar
-!define Menu          javafx.scene.control.Menu
-!define MenuItem      javafx.scene.control.MenuItem
-!define VBox          javafx.scene.layout.VBox
-!define HBox          javafx.scene.layout.HBox
-!define Button        javafx.scene.control.Button
-!define Label         javafx.scene.control.Label
-!define TextInputDialog javafx.scene.control.TextInputDialog
-!define Alert         javafx.scene.control.Alert
-!define RadioMenuItem javafx.scene.control.RadioMenuItem
 
-class Controller {
-    -TableView<Event> eventsTable
-    -TableColumn<Event, String> eventNameColumn
-    -TableColumn<Event, String> eventDateColumn
-    -TableColumn<Event, String> participantsColumn
-    -TableColumn<Event, String> betColumn
-    -Menu clientMenu
-    -ObservableList<Event> events
-    -ObservableList<String> clients
-    -String selectedClient
-    +void initialize()
-    +void handlePlaceBet()
-    +void handleClearSelection()
-    +void handleAddClient()
-    +void handleRemoveClient()
-    +void updateClientMenu()
-    +void showAlert(String title, String content)
+' Class Diagram
+class MainWindowController {
+  + ComboBox<Category> categoryBox
+  + TableView<Event> eventsTable
+  + ObservableList<Category> categories
+  + ObservableList<Event> events
+  + ObservableList<String> clients
+  + String selectedClient
+  --
+  + void initialize()
+  + void handlePlaceBet()
+  + void handleClearSelection()
+  + void handleAddClient()
+  + void handleRemoveClient()
+  + void handleNewEvent()
+  + void handleRemoveEvent()
+  + void handleNewCategory()
+  + void showAlert(String title, String content)
+  + void update()
+  + void addEvent(Event event)
+  + void addBet(Event event, int bet, String team)
+}
+
+class NewBetWindowController {
+  + ComboBox<String> teamBox
+  + TextField betAmountTextField
+  + MainWindowController mainWindowController
+  + Event selectedEvent
+  + String selectedClient
+  --
+  + void handleNewBet()
+  + void cancel()
+  + void setMainWindowController(MainWindowController controller)
+  + void setSelectedEvent(Event event)
+  + void setSelectedClient(String client)
+}
+
+class NewEventWindowController {
+  + TextField eventNameTextField
+  + TextField fisrtTeamTextField
+  + TextField secondTeamTextField
+  + DatePicker datePicker
+  + MainWindowController mainWindowController
+  --
+  + void cancel()
+  + void createEvent()
+  + void setParentController(MainWindowController controller)
 }
 
 class Event {
-    -String eventName
-    -String eventDate
-    -String participants
-    -String bet
-    +StringProperty eventNameProperty()
-    +StringProperty eventDateProperty()
-    +StringProperty participantsProperty()
-    +StringProperty betProperty()
+  + StringProperty eventName
+  + StringProperty eventDate
+  + ObservableList<String> participants
+  + ObservableList<Integer> bet
+  + ObservableList<Double> odds
+  + List<Listener> listeners
+  - final double maxOdds
+  - final double ownerMargin
+  --
+  + void addBet(String participant, int bet)
+  + void addListener(Listener listener)
+  + void removeListener(Listener listener)
+  + StringProperty eventNameProperty()
 }
 
-Controller --> TableView
-Controller --> TableColumn
-Controller --> Menu
-Controller --> ObservableList
-Controller --> String
+class Category {
+  + ObservableList<Event> events
+  + String categoryName
+  --
+  + boolean equals(String str)
+  + String getCategoryName()
+  + ObservableList<Event> getEvents()
+}
 
-TableView --> Event
-TableColumn --> Event
+MainWindowController --> NewBetWindowController : uses
+MainWindowController --> NewEventWindowController : uses
+MainWindowController --> Event : manages
+MainWindowController --> Category : manages
+NewBetWindowController --> Event : updates
+NewEventWindowController --> Event : creates
+Category --> Event : contains
 
 @enduml
