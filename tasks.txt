@@ -2,18 +2,11 @@ Baza danych			Bartek
 	przykladowe dane
 Klasa Client			Bartek
 	na co ile postawil
-	implements Listener (funkcja update, sprawdza czy jakies eventy w ktorych bierze udzial sie skończyły)
-Klasa Event			Krzysiek
-	kursy
-	ile postawione
-	Kategorie
-Poporawic UI			Krzysiek
-	Dodawac/usuwanie nowe mecze
 
 
 
 Saldo klienta
-Sprawdzanie daty (licznik czasu, wyplacanie pieniedzy)
+Sprawdzanie daty ( wyplacanie pieniedzy)
 
 Promocje
 

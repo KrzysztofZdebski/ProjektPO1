@@ -1,24 +1,24 @@
 package org.main.gamblingapp;
 
+import Interfaces.Listener;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MainWindowController {
+public class MainWindowController implements Listener {
 
+    @FXML
+    private ComboBox<Category> categoryBox;
     @FXML
     private TableView<Event> eventsTable;
     @FXML
@@ -29,39 +29,98 @@ public class MainWindowController {
     private TableColumn<Event, String> participantsColumn;
     @FXML
     private TableColumn<Event, String> betColumn;
+    @FXML
+    private TableColumn<Event,String> oddsColumn;
+    @FXML
+    private TableColumn<Event, String> finishedColumn;
 
     @FXML
-    private Menu clientMenu;
+    private ComboBox<String> clientBox;
 
+    private final ObservableList<Category> categories = FXCollections.observableArrayList();
     private ObservableList<Event> events = FXCollections.observableArrayList();
-    private ObservableList<String> clients = FXCollections.observableArrayList();
+    private final ObservableList<String> clients = FXCollections.observableArrayList();
     private String selectedClient;
 
     @FXML
     private void initialize() {
         eventNameColumn.setCellValueFactory(cellData -> cellData.getValue().eventNameProperty());
         eventDateColumn.setCellValueFactory(cellData -> cellData.getValue().eventDateProperty());
-        participantsColumn.setCellValueFactory(cellData -> cellData.getValue().participantsProperty());
-        betColumn.setCellValueFactory(cellData -> cellData.getValue().betProperty());
+        participantsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().participantsList().getFirst() + " vs " + cellData.getValue().participantsList().get(1)));
+        betColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().betList().getFirst() + " | " + cellData.getValue().betList().get(1)));
+        oddsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().oddsList().getFirst() + " | " + cellData.getValue().oddsList().get(1)));
+        finishedColumn.setCellValueFactory(cellData -> {
+            if(cellData.getValue().isFinished()) return new SimpleStringProperty("Finished");
+            return new SimpleStringProperty(cellData.getValue().getTimeLeft() + " days");
+        });
+
 
         // Add dummy data to events
-        events.add(new Event("Event 1", "2024-01-01", "Participant A vs Participant B", "Bet Button Here"));
-        events.add(new Event("Event 2", "2024-01-02", "Participant C vs Participant D", "Bet Button Here"));
+        events.add(new Event("Event 1", "2024-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
+        events.getFirst().addListener(this);
+        events.add(new Event("Event 2", "2024-01-02", new String[]{"Participant C", "Participant D"}, new Integer[]{0,100}));
+        events.get(1).addListener(this);
+        categories.add(new Category("cat 1", events));
+        categories.add(new Category("cat 2"));
 
         eventsTable.setItems(events);
+        eventsTable.getSortOrder().add(eventDateColumn);
 
         // Add dummy data to clients
         clients.addAll("Client 1", "Client 2", "Client 3");
-        updateClientMenu();
+
+        clientBox.setItems(clients);
+        clientBox.setOnAction(_ -> update());
+        categoryBox.setItems(categories);
+        categoryBox.getSelectionModel().select(categories.getFirst());
+        categoryBox.setOnAction(_ -> update());
+        categoryBox.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Category> call(ListView<Category> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Category item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(item.getCategoryName());
+                        }
+                    }
+                };
+            }
+        });
+        categoryBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Category item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getCategoryName());
+                }
+            }
+        });
     }
 
     @FXML
-    private void handlePlaceBet() {
+    private void handlePlaceBet() throws IOException {
         Event selectedEvent = eventsTable.getSelectionModel().getSelectedItem();
         if (selectedEvent != null) {
+            if(selectedEvent.isFinished()){
+                showAlert("Event finished", "This event has already finished.");
+                return;
+            }
             if (selectedClient != null) {
-                // Place bet logic here
-                System.out.println("Placing bet on: " + selectedEvent.getEventName() + " for client: " + selectedClient);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/main/gamblingapp/new-bet-window.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(loader.load()));
+                stage.setTitle("Add New Bet");
+                stage.show();
+                NewBetWindowController newBetWindowController = loader.getController();
+                newBetWindowController.setParentController(this);
+                newBetWindowController.setSelectedEvent(selectedEvent);
+                newBetWindowController.setSelectedClient(selectedClient);
             } else {
                 showAlert("No client selected", "Please select a client before placing a bet.");
             }
@@ -73,6 +132,7 @@ public class MainWindowController {
     @FXML
     private void handleClearSelection() {
         eventsTable.getSelectionModel().clearSelection();
+//        events.get(1).addBet("Participant C",10);
     }
 
     @FXML
@@ -85,7 +145,7 @@ public class MainWindowController {
         dialog.showAndWait().ifPresent(clientName -> {
             if (!clients.contains(clientName)) {
                 clients.add(clientName);
-                updateClientMenu();
+                update();
             } else {
                 showAlert("Client already exists", "A client with this name already exists.");
             }
@@ -97,69 +157,78 @@ public class MainWindowController {
         if (selectedClient != null) {
             clients.remove(selectedClient);
             selectedClient = null;
-            updateClientMenu();
+            update();
         } else {
             showAlert("No client selected", "Please select a client before attempting to remove.");
         }
     }
 
-    private void updateClientMenu() {
-        clientMenu.getItems().clear();
-        ToggleGroup clientToggleGroup = new ToggleGroup();
-
-        for (String client : clients) {
-            RadioMenuItem menuItem = new RadioMenuItem(client);
-            menuItem.setToggleGroup(clientToggleGroup);
-            menuItem.setOnAction(event -> {
-                selectedClient = client;
-                System.out.println("Selected " + client);
-            });
-
-            if (client.equals(selectedClient)) {
-                menuItem.setSelected(true);
-            }
-
-            clientMenu.getItems().add(menuItem);
-        }
+    public void handleNewEvent() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/main/gamblingapp/new-event-window.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Add New Event");
+        stage.show();
+        NewEventWindowController newEventWindowController = loader.getController();
+        newEventWindowController.setParentController(this);
     }
 
-    private void showAlert(String title, String content) {
+    public void handleRemoveEvent() {
+        if(eventsTable.getSelectionModel().getSelectedItem() == null) return;
+        events.remove(eventsTable.getSelectionModel().getSelectedItem());
+        update();
+    }
+
+    public void handleNewCategory() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Category");
+        dialog.setHeaderText("Add a new category");
+        dialog.setContentText("Category name:");
+        dialog.showAndWait().ifPresent(categoryName -> {
+            for(Category category : categories) {
+                if(category.equals(categoryName)) {
+                    showAlert("Category already exists", "A category with this name already exists.");
+                    return;
+                }
+            }
+            Category newCategory = new Category(categoryName);
+            categories.add(newCategory);
+            categoryBox.getSelectionModel().select(newCategory);
+            update();
+        });
+    }
+
+    public void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
     }
-    public void loadData() throws IOException, ParseException, URISyntaxException {
-        JSONArray jsonArrayClients= (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/klienci.json").toURI())));
-        List<String[]> valuesClients = new ArrayList<>();
-        for (Object obj : jsonArrayClients) {
-            JSONObject jsonObject = (JSONObject) obj;
-            String[] row = new String[2];
-            row[0] = (String) jsonObject.get("clientName");
-            row[1] = jsonObject.get("clientAccBalance").toString();
-            valuesClients.add(row);
-        }
-        // Convert List to 2D array
-        String[][] valuesArrayClients = new String[valuesClients.size()][2];
-        for (int i = 0; i < valuesClients.size(); i++) {
-            valuesArrayClients[i] = valuesClients.get(i);
-        }
 
-        /*for (int i = 0; i < valuesArrayClients.length; i++) {
-            clients.add((new Client(valuesArrayClients[i][0], Integer.parseInt(valuesArrayClients[i][1]))));
-        }*/
-         // Dla listy klientow typu String
-        /*for (Object obj : jsonArrayClients) {
-            JSONObject jsonObject = (JSONObject) obj;
-            String clientName = (String) jsonObject.get("clientName");
-            int clientAccBalance = Integer.parseInt(jsonObject.get("clientAccBalance").toString());
+    public void update() {
+        events = categoryBox.getValue().getEvents();
+        selectedClient = clientBox.getSelectionModel().getSelectedItem();
+        eventsTable.setItems(events);
+        eventsTable.refresh();
+        eventsTable.sort();
+    }
 
-            // Dodanie imienia klienta do listy (jako tekst)
-            clients.add(clientName);
-            System.out.println("Załadowano klienta: " + clientName + ", saldo: " + clientAccBalance);
+    public void addEvent(Event event) {
+        events.add(event);
+        update();
+    }
+
+    public void addBet(Event event, int bet, String team) {
+        event.addBet(team, bet);
+        update();
+    }
+
+    public void handleCheckDate() {
+        for(Category category : categories) {
+            for(Event event : category.getEvents()) {
+                event.checkDate();
+            }
         }
-
-           updateClientMenu();*/
     }
 }
