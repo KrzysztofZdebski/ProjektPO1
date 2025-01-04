@@ -10,6 +10,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -39,7 +50,7 @@ public class MainWindowController implements Listener {
 
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
     private ObservableList<Event> events = FXCollections.observableArrayList();
-    private final ObservableList<String> clients = FXCollections.observableArrayList();
+    private ObservableList<String> clients = FXCollections.observableArrayList();
     private String selectedClient;
 
     @FXML
@@ -132,7 +143,6 @@ public class MainWindowController implements Listener {
     @FXML
     private void handleClearSelection() {
         eventsTable.getSelectionModel().clearSelection();
-//        events.get(1).addBet("Participant C",10);
     }
 
     @FXML
@@ -230,5 +240,37 @@ public class MainWindowController implements Listener {
                 event.checkDate();
             }
         }
+    }
+    public void loadData() throws IOException, ParseException, URISyntaxException {
+        JSONArray jsonArrayClients= (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/klienci.json").toURI())));
+        List<String[]> valuesClients = new ArrayList<>();
+        for (Object obj : jsonArrayClients) {
+            JSONObject jsonObject = (JSONObject) obj;
+            String[] row = new String[2];
+            row[0] = (String) jsonObject.get("clientName");
+            row[1] = jsonObject.get("clientAccBalance").toString();
+            valuesClients.add(row);
+        }
+        // Convert List to 2D array
+        String[][] valuesArrayClients = new String[valuesClients.size()][2];
+        for (int i = 0; i < valuesClients.size(); i++) {
+            valuesArrayClients[i] = valuesClients.get(i);
+        }
+
+        /*for (int i = 0; i < valuesArrayClients.length; i++) {
+            clients.add((new Client(valuesArrayClients[i][0], Integer.parseInt(valuesArrayClients[i][1]))));
+        }*/
+         // Dla listy klientow typu String
+        /*for (Object obj : jsonArrayClients) {
+            JSONObject jsonObject = (JSONObject) obj;
+            String clientName = (String) jsonObject.get("clientName");
+            int clientAccBalance = Integer.parseInt(jsonObject.get("clientAccBalance").toString());
+
+            // Dodanie imienia klienta do listy (jako tekst)
+            clients.add(clientName);
+            System.out.println("Załadowano klienta: " + clientName + ", saldo: " + clientAccBalance);
+        }
+
+           updateClientMenu();*/
     }
 }
