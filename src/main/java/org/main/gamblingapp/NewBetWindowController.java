@@ -12,7 +12,7 @@ public class NewBetWindowController {
     @FXML
     private TextField betAmountTextField;
 
-    private MainWindowController mainWindowController;
+    private MainWindowController parentController;
     private Event selectedEvent;
     private String selectedClient;
 
@@ -21,10 +21,10 @@ public class NewBetWindowController {
             String team = teamBox.getSelectionModel().getSelectedItem();
             int betAmount = Integer.parseInt(betAmountTextField.getText());
             if(!selectedEvent.participantsList().contains(team)){throw new IllegalArgumentException();}
-            mainWindowController.addBet(selectedEvent, betAmount, team);
+            parentController.addBet(selectedEvent, betAmount, team);
             cancel();
         } catch (Exception e) {
-            mainWindowController.showAlert("Invalid values", "Please enter a valid value");
+            parentController.showAlert("Invalid values", "Please enter a valid value");
         }
     }
 
@@ -33,7 +33,7 @@ public class NewBetWindowController {
         stage.close();
     }
 
-    public void setMainWindowController(MainWindowController mainWindowController) {this.mainWindowController = mainWindowController;}
+    public void setParentController(MainWindowController parentController) {this.parentController = parentController;}
     public void setSelectedEvent(Event selectedEvent) {
         this.selectedEvent = selectedEvent;
         teamBox.setItems(FXCollections.observableArrayList(selectedEvent.participantsList()));

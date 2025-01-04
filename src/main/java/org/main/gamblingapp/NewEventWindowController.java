@@ -15,7 +15,7 @@ public class NewEventWindowController {
     @FXML
     private DatePicker datePicker;
 
-    private MainWindowController mainWindowController;
+    private MainWindowController parentController;
 
     public void cancel() {
         Stage stage = (Stage) datePicker.getScene().getWindow();
@@ -29,16 +29,16 @@ public class NewEventWindowController {
             String secondTeam = secondTeamTextField.getText();
             String date = datePicker.getValue().toString();
             if(eventName.isEmpty() || firstTeam.isEmpty() || secondTeam.isEmpty()) {throw new NullPointerException();}
-            mainWindowController.addEvent(new Event(eventName, date, new String[]{firstTeam, secondTeam}, new Integer[]{0,0}));
+            parentController.addEvent(new Event(eventName, date, new String[]{firstTeam, secondTeam}, new Integer[]{0,0}));
             cancel();
         }catch(NumberFormatException e){
-            mainWindowController.showAlert("Incorrect values", "Please enter a valid values");
+            parentController.showAlert("Incorrect values", "Please enter a valid values");
         }catch(NullPointerException e){
-            mainWindowController.showAlert("Missing values", "Please enter all values");
+            parentController.showAlert("Missing values", "Please enter all values");
         }
     }
 
     public void setParentController(MainWindowController mainWindowController) {
-        this.mainWindowController = mainWindowController;
+        this.parentController = mainWindowController;
     }
 }

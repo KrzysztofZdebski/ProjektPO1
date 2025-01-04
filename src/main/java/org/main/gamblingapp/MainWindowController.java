@@ -107,7 +107,7 @@ public class MainWindowController implements Listener {
                 stage.setTitle("Add New Bet");
                 stage.show();
                 NewBetWindowController newBetWindowController = loader.getController();
-                newBetWindowController.setMainWindowController(this);
+                newBetWindowController.setParentController(this);
                 newBetWindowController.setSelectedEvent(selectedEvent);
                 newBetWindowController.setSelectedClient(selectedClient);
             } else {
