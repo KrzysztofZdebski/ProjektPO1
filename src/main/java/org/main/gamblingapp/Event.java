@@ -5,12 +5,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.round;
 
@@ -55,8 +59,9 @@ public class Event {
             odds.set(i, Math.min(maxOdds, calcOdds));
         }
     }
-    public void addBet(String participant, int bet) {
+    public void addBet(String participant, int bet) throws IllegalArgumentException {
         int participantIdx = participants.indexOf(participant);
+        if(participantIdx == -1) throw new IllegalArgumentException();
         this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
         countOdds();
         notifyListeners();
@@ -69,17 +74,24 @@ public class Event {
         timeLeft = Long.toString(today.until(date, ChronoUnit.DAYS));
         notifyListeners();
     }
-    public void addListener(Listener listener) {
-        listeners.add(listener);
-    }
-    public void removeListener(Listener listener) {
-        listeners.remove(listener);
-    }
+    public void addListener(Listener listener) {listeners.add(listener);}
+    public void removeListener(Listener listener) {listeners.remove(listener);}
     private void notifyListeners() {
         for (Listener listener : listeners) {
             listener.update();
         }
     }
+    public JSONObject toJSONObj() {
+        Map<String,String> map = new HashMap<>();
+        map.put("eventName", eventName.get());
+        map.put("eventDate", eventDate.get());
+        map.put("participant0", participants.getFirst());
+        map.put("participant1", participants.getLast());
+        map.put("bet0", betList().getFirst().toString());
+        map.put("bet1", betList().getLast().toString());
+        return new JSONObject(map);
+    }
+    public boolean equals(String str){return str.equals(eventName.get());}
 
     public StringProperty eventNameProperty() {return eventName;}
     public StringProperty eventDateProperty() {return eventDate;}

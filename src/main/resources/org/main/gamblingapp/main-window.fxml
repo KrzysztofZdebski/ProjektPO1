@@ -42,6 +42,7 @@
         <TableColumn fx:id="betColumn" text="Bets" />
           <TableColumn fx:id="oddsColumn" text="Odds" />
           <TableColumn fx:id="finishedColumn" text="Time left" />
+          <TableColumn fx:id="clientBetColumn" text="Client's bet" />
       </columns>
     </TableView>
 
@@ -49,7 +50,8 @@
       <Button onAction="#handlePlaceBet" text="Place Bet" />
       <Button onAction="#handleClearSelection" text="Clear Selection" />
          <Button mnemonicParsing="false" onAction="#handleCheckDate" text="Check Date" />
-         <Button onAction="#addBalance" mnemonicParsing="false" text="Add Money" />
+         <Button mnemonicParsing="false" onAction="#addBalance" text="Add Money" />
+         <Button onAction="#saveToFile" mnemonicParsing="false" text="Save" />
     </HBox>
   </children>
 </VBox>

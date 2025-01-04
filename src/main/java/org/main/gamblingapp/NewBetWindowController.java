@@ -21,8 +21,8 @@ public class NewBetWindowController {
             String team = teamBox.getSelectionModel().getSelectedItem();
             int betAmount = Integer.parseInt(betAmountTextField.getText());
             if(!selectedEvent.participantsList().contains(team)){throw new IllegalArgumentException();}
-            selectedClient.placeBet(selectedEvent, betAmount);
             parentController.addBet(selectedEvent, betAmount, team);
+            selectedClient.placeBet(selectedEvent, betAmount, team);
             cancel();
         } catch(IllegalArgumentException e){
             parentController.showAlert("Not enough founds","Not enough founds");

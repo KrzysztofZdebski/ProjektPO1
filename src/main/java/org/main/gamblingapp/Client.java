@@ -1,35 +1,43 @@
 package org.main.gamblingapp;
-import java.util.ArrayList;
-import java.util.List;
+import Interfaces.Listener;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
-public class Client{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Client implements Listener {
     private String clientName;
     private int clientAccBalance;
     private List<Bet> bets;
+
     public Client(String clientName, int clientAccBalance) {
         this.clientName = clientName;
         this.clientAccBalance = clientAccBalance;
         this.bets = new ArrayList<>();
     }
+
     public String getClientName() {
         return clientName;
     }
     public int getClientAccBalance() {
         return clientAccBalance;
     }
-    public void placeBet(Event event, int amount) throws IllegalArgumentException {
+    public List<Bet> getBets() {return bets;}
+    public void placeBet(Event event, int amount, String team) throws IllegalArgumentException {
         if (amount > clientAccBalance) {
 //            System.out.println("You don't have enough money to make a bet");
             throw new IllegalArgumentException("Amount must be lower than the client balance");
         } else {
             clientAccBalance -= amount;
-            bets.add(new Bet(event, amount));
+            bets.add(new Bet(event, amount, team));
         }
     }
     public void addBalance(int amount) {
         clientAccBalance += amount;
     }
-
     public void showBets() {
         if (bets.isEmpty()) {
             System.out.println("No bets found");
@@ -40,9 +48,25 @@ public class Client{
             }
         }
     }
-
     public boolean equals(String clientName) {
         return this.clientName.equals(clientName);
+    }
+    public void update(){
+        for(Bet bet : bets) {
+            if(bet.getEvent().isFinished()){
+                addBalance(bet.getAmount());
+                bets.remove(bet);
+            }
+        }
+    }
+    public JSONObject toJSONObj() {
+        Map<String,String> map = new HashMap<>();
+        map.put("clientName", clientName);
+        map.put("clientAccBalance", String.valueOf(clientAccBalance));
+        for(Bet bet : bets) {
+            map.put(bet.getEvent().getEventName(), String.valueOf(bet.getAmount()));
+        }
+        return new JSONObject(map);
     }
 }
 
