@@ -39,7 +39,7 @@
         <TableColumn fx:id="participantsColumn" text="Participants" />
         <TableColumn fx:id="betColumn" text="Bets" />
           <TableColumn fx:id="oddsColumn" text="Odds" />
-          <TableColumn fx:id="finishedColumn" text="Is finished?" />
+          <TableColumn fx:id="finishedColumn" text="Time left" />
       </columns>
     </TableView>
 

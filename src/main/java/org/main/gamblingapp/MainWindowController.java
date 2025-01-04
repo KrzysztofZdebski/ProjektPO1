@@ -49,7 +49,10 @@ public class MainWindowController implements Listener {
         participantsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().participantsList().getFirst() + " vs " + cellData.getValue().participantsList().get(1)));
         betColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().betList().getFirst() + " | " + cellData.getValue().betList().get(1)));
         oddsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().oddsList().getFirst() + " | " + cellData.getValue().oddsList().get(1)));
-        finishedColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isFinished().toString()));
+        finishedColumn.setCellValueFactory(cellData -> {
+            if(cellData.getValue().isFinished()) return new SimpleStringProperty("Finished");
+            return new SimpleStringProperty(cellData.getValue().getTimeLeft() + " days");
+        });
 
 
         // Add dummy data to events

@@ -6,7 +6,7 @@ Klasa Client			Bartek
 
 
 Saldo klienta
-Sprawdzanie daty (licznik czasu, wyplacanie pieniedzy)
+Sprawdzanie daty ( wyplacanie pieniedzy)
 
 Promocje
 

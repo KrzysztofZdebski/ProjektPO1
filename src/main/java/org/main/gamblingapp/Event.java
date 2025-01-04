@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class Event {
     private final List<Listener> listeners = new ArrayList<>();
     private final double maxOdds = 10.0;
     private final double ownerMargin = 1.05;
-    private Boolean finished = false;
+    private boolean finished = false;
+    private String timeLeft;
 
     public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
         if(participants.length != 2 || bet.length != 2) throw new IllegalArgumentException();
@@ -64,6 +66,7 @@ public class Event {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(eventDate.get(), formatter);
         finished = today.isAfter(date);
+        timeLeft = Long.toString(today.until(date, ChronoUnit.DAYS));
         notifyListeners();
     }
     public void addListener(Listener listener) {
@@ -83,5 +86,6 @@ public class Event {
     public ObservableList<String> participantsList() {return participants;}
     public ObservableList<Integer> betList() {return bet;}
     public ObservableList<Double> oddsList() {return odds;}
-    public Boolean isFinished() {return finished;}
+    public boolean isFinished() {return finished;}
+    public String getTimeLeft() {return timeLeft;}
 }
