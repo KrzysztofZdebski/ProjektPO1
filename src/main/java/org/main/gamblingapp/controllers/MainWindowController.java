@@ -1,5 +1,6 @@
 package org.main.gamblingapp.controllers;
 
+import javafx.scene.control.Label;
 import org.main.gamblingapp.interfaces.Listener;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,13 +14,12 @@ import javafx.scene.control.Alert.AlertType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.stage.Stage;
@@ -87,12 +87,12 @@ public class MainWindowController implements Listener {
         clientBetColumn.prefWidthProperty().bind(eventsTable.widthProperty().subtract(usedWidth));
 
         // Add dummy data to events
-        events.add(new Event("Event1", "2026-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
-        events.getFirst().addListener(this);
-        events.add(new Event("Event2", "2024-01-02", new String[]{"Participant C", "Participant D"}, new Integer[]{0,100}));
-        events.get(1).addListener(this);
-        categories.add(new Category("cat1", events));
-        categories.add(new Category("cat2"));
+//        events.add(new Event("Event1", "2026-01-01", new String[]{"Participant A", "Participant B"}, new Integer[]{8546,6742}));
+//        events.getFirst().addListener(this);
+//        events.add(new Event("Event2", "2024-01-02", new String[]{"Participant C", "Participant D"}, new Integer[]{0,100}));
+//        events.get(1).addListener(this);
+//        categories.add(new Category("cat1", events));
+//        categories.add(new Category("cat2"));
         eventsTable.setItems(events);
         eventsTable.getSortOrder().add(eventDateColumn);
 
@@ -313,6 +313,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 cyclingEvents.add(event);
                 eventMap.put(eventName, event);
 
@@ -331,6 +332,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 footballEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -348,6 +350,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 athleticsEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -365,6 +368,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 basketballEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -382,6 +386,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 boxingEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -399,6 +404,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 swimmingEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -416,6 +422,7 @@ public class MainWindowController implements Listener {
                 int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
 
                 Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                event.addListener(this);
                 tennisEvents.add(event);
                 eventMap.put(eventName, event);
             }
@@ -438,6 +445,7 @@ public class MainWindowController implements Listener {
                         if (event != null) {
                             Bet bet = new Bet(event, betAmount, "Unknown");
                             client.getBets().add(bet);
+                            event.addListener(client);
                         } else {
                             System.err.println("Event not found for bet: " + eventName);
                         }
@@ -485,5 +493,8 @@ public class MainWindowController implements Listener {
         }catch (IOException e) {
             showAlert(e.getMessage(), "Failed to save data.");
         }
+    }
+    private void resizeColumns() {
+
     }
 }

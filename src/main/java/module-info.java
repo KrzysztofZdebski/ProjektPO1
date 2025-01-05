@@ -3,6 +3,7 @@ module org.main.gamblingapp {
     requires javafx.fxml;
     requires json.simple;
     requires jdk.compiler;
+    requires java.desktop;
 
 
     opens org.main.gamblingapp to javafx.fxml;

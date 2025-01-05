@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.controllers.MainWindowController">
+<VBox prefHeight="525.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.controllers.MainWindowController">
   <padding>
     <Insets bottom="10" left="10" right="10" top="10" />
   </padding>
@@ -36,13 +36,13 @@
 
     <TableView fx:id="eventsTable" prefHeight="400" prefWidth="600">
       <columns>
-        <TableColumn fx:id="eventNameColumn" text="Event Name" />
-        <TableColumn fx:id="eventDateColumn" text="Date" />
-        <TableColumn fx:id="participantsColumn" text="Participants" />
+        <TableColumn fx:id="eventNameColumn" prefWidth="200.0" text="Event Name" />
+        <TableColumn fx:id="eventDateColumn" prefWidth="70.0" text="Date" />
+        <TableColumn fx:id="participantsColumn" prefWidth="170.0" text="Participants" />
         <TableColumn fx:id="betColumn" text="Bets" />
-          <TableColumn fx:id="oddsColumn" text="Odds" />
-          <TableColumn fx:id="finishedColumn" text="Time left" />
-          <TableColumn fx:id="clientBetColumn" text="Client's bet" />
+          <TableColumn fx:id="oddsColumn" prefWidth="70.0" text="Odds" />
+          <TableColumn fx:id="finishedColumn" prefWidth="70.0" text="Time left" />
+          <TableColumn fx:id="clientBetColumn" prefWidth="91.0" text="Client's bet" />
       </columns>
     </TableView>
 
@@ -51,7 +51,7 @@
       <Button onAction="#handleClearSelection" text="Clear Selection" />
          <Button mnemonicParsing="false" onAction="#handleCheckDate" text="Check Date" />
          <Button mnemonicParsing="false" onAction="#addBalance" text="Add Money" />
-         <Button onAction="#saveToFile" mnemonicParsing="false" text="Save" />
+         <Button mnemonicParsing="false" onAction="#saveToFile" text="Save" />
     </HBox>
   </children>
 </VBox>
