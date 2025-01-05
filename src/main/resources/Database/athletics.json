@@ -1,0 +1,26 @@
+[
+    	{
+          "eventName": "Marathon City Run",
+          "eventDate": "2025-11-20",
+          "participant0": "Runner 3",
+          "bet0": 214,
+          "participant1":   "Runner 4",
+          "bet1":5429
+    	},
+    	{
+          "eventName": "Marathon",
+          "eventDate": "2025-10-01",
+          "participant0": "Runner 1",
+          "bet0": 7630,
+          "participant1": "Runner 2",
+          "bet1":3815
+    	},
+        {
+          "eventName": "Marathon Big Win Run",
+          "eventDate": "2025-02-01",
+          "participant0": "Runner 5",
+          "bet0": 2359,
+          "participant1": "Runner 6",
+          "bet1":8426
+        }
+]

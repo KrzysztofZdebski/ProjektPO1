@@ -1,0 +1,34 @@
+[
+  {
+    "eventName": "Football Match",
+    "eventDate": "2025-04-15",
+    "participant0": "Team H",
+    "bet0": 124,
+    "participant1": "Team E",
+    "bet1": 15125
+  },
+  {
+    "eventName": "Football Match 2",
+    "eventDate": "2025-06-15",
+    "participant0": "Team A",
+    "bet0": 300,
+    "participant1": "Team B",
+    "bet1": 450
+  },
+  {
+    "eventName": "Football Derby",
+    "eventDate": "2025-03-25",
+    "participant0": "Team C",
+    "bet0": 400,
+    "participant1": "Team D",
+    "bet1": 500
+  },
+  {
+    "eventName": "Football Cup",
+    "eventDate": "2025-12-01",
+    "participant0": "Team E",
+    "bet0": 500,
+    "participant1": "Team F",
+    "bet1": 600
+  }
+]

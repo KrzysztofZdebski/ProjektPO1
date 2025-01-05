@@ -18,7 +18,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.main.gamblingapp.model.Bet;
@@ -90,7 +93,6 @@ public class MainWindowController implements Listener {
         events.get(1).addListener(this);
         categories.add(new Category("cat1", events));
         categories.add(new Category("cat2"));
-
         eventsTable.setItems(events);
         eventsTable.getSortOrder().add(eventDateColumn);
 
@@ -295,38 +297,155 @@ public class MainWindowController implements Listener {
         update();
     }
     public void loadData() {
-        try{
+        try {
+            Map<String, Event> eventMap = new HashMap<>();
+
+            // cycling
+            ObservableList<Event> cyclingEvents = FXCollections.observableArrayList();
+            JSONArray cyclingData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/cycling.json").toURI())));
+            for (Object obj : cyclingData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                cyclingEvents.add(event);
+                eventMap.put(eventName, event);
+
+            }
+            categories.add(new Category("Cycling", cyclingEvents));
+            //football
+            ObservableList<Event> footballEvents = FXCollections.observableArrayList();
+            JSONArray footballData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/football.json").toURI())));
+            for (Object obj : footballData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                footballEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Football", footballEvents));
+            //athletics
+            ObservableList<Event> athleticsEvents = FXCollections.observableArrayList();
+            JSONArray athleticsData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/athletics.json").toURI())));
+            for (Object obj : athleticsData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                athleticsEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Athletics", athleticsEvents));
+            //basketball
+            ObservableList<Event> basketballEvents = FXCollections.observableArrayList();
+            JSONArray basketballData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/basketball.json").toURI())));
+            for (Object obj : basketballData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                basketballEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Basketball", basketballEvents));
+            //boxing
+            ObservableList<Event> boxingEvents = FXCollections.observableArrayList();
+            JSONArray boxingData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/boxing.json").toURI())));
+            for (Object obj : boxingData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                boxingEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Boxing", boxingEvents));
+            //swimming
+            ObservableList<Event> swimmingEvents = FXCollections.observableArrayList();
+            JSONArray swimmingData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/swimming.json").toURI())));
+            for (Object obj : swimmingData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                swimmingEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Swimming", swimmingEvents));
+            //tennis
+            ObservableList<Event> tennisEvents = FXCollections.observableArrayList();
+            JSONArray tennisData = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/tennis.json").toURI())));
+            for (Object obj : tennisData) {
+                JSONObject jsonObject = (JSONObject) obj;
+                String eventName = (String) jsonObject.get("eventName");
+                String eventDate = (String) jsonObject.get("eventDate");
+                String participant0 = (String) jsonObject.get("participant0");
+                int bet0 = Integer.parseInt(jsonObject.get("bet0").toString());
+                String participant1 = (String) jsonObject.get("participant1");
+                int bet1 = Integer.parseInt(jsonObject.get("bet1").toString());
+
+                Event event = new Event(eventName, eventDate, new String[]{participant0, participant1}, new Integer[]{bet0, bet1});
+                tennisEvents.add(event);
+                eventMap.put(eventName, event);
+            }
+            categories.add(new Category("Tennis", tennisEvents));
+
             JSONArray jsonArrayClients = (JSONArray) new JSONParser().parse(new FileReader(new File(MainWindowController.class.getResource("/Database/clients.json").toURI())));
-            List<String[]> valuesClients = new ArrayList<>();
             for (Object obj : jsonArrayClients) {
                 JSONObject jsonObject = (JSONObject) obj;
-                String[] row = new String[2];
-                row[0] = (String) jsonObject.get("clientName");
-                row[1] = jsonObject.get("clientAccBalance").toString();
-                valuesClients.add(row);
+                String clientName = (String) jsonObject.get("clientName");
+                int clientAccBalance = Integer.parseInt(jsonObject.get("clientAccBalance").toString());
+                Client client = new Client(clientName, clientAccBalance);
+
+                for (Object keyObj : jsonObject.keySet()) {
+                    String key = (String) keyObj;
+                    if (!key.equals("clientName") && !key.equals("clientAccBalance")) {
+                        String eventName = key;
+                        int betAmount = Integer.parseInt(jsonObject.get(key).toString());
+
+                        Event event = eventMap.get(eventName);
+                        if (event != null) {
+                            Bet bet = new Bet(event, betAmount, "Unknown");
+                            client.getBets().add(bet);
+                        } else {
+                            System.err.println("Event not found for bet: " + eventName);
+                        }
+                    }
+                }
+                clients.add(client);
             }
-            // Convert List to 2D array
-            String[][] valuesArrayClients = new String[valuesClients.size()][2];
-            for (int i = 0; i < valuesClients.size(); i++) {
-                valuesArrayClients[i] = valuesClients.get(i);
-            }
-
-        for (int i = 0; i < valuesArrayClients.length; i++) {
-            clients.add((new Client(valuesArrayClients[i][0], Integer.parseInt(valuesArrayClients[i][1]))));
-        }
-            // Dla listy klientow typu String
-        /*for (Object obj : jsonArrayClients) {
-            JSONObject jsonObject = (JSONObject) obj;
-            String clientName = (String) jsonObject.get("clientName");
-            int clientAccBalance = Integer.parseInt(jsonObject.get("clientAccBalance").toString());
-
-            // Dodanie imienia klienta do listy (jako tekst)
-            clients.add(clientName);
-            System.out.println("Załadowano klienta: " + clientName + ", saldo: " + clientAccBalance);
-        }
-
-           updateClientMenu();*/
-        }catch (Exception e) {
+        } catch (Exception e) {
             showAlert(e.getMessage(), "Failed to load data.");
         }
     }
