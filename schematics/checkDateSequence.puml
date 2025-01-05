@@ -1,0 +1,33 @@
+@startuml
+actor User
+participant MainWindowController
+participant Category
+participant Client
+participant Event
+participant DateTime
+
+User -> MainWindowController: handleCheckDate()
+activate MainWindowController
+
+MainWindowController -> Category: getCategories()
+activate Category
+
+loop For each category
+    Category -> Event: getEvents()
+    activate Event
+
+    loop For each event
+        Event -> DateTime: checkDate()
+        Event -> Client: notifyListeners()
+        Event -> MainWindowController: notifyListeners()
+    end
+
+    deactivate Event
+end
+
+MainWindowController -> MainWindowController: update()
+MainWindowController -> User: Display updated data
+
+deactivate Category
+deactivate MainWindowController
+@enduml

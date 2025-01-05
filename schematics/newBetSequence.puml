@@ -1,0 +1,44 @@
+@startuml
+actor User
+participant MainWindowController
+participant Event
+participant Client
+participant NewBetWindowController
+
+User -> MainWindowController: handlePlaceBet()
+activate MainWindowController
+
+MainWindowController -> Event: getSelection()
+alt Event is null
+    MainWindowController -> MainWindowController: showAlert("No event selected")
+end
+
+alt Event is finished
+    MainWindowController -> MainWindowController: showAlert("Event finished")
+end
+
+MainWindowController -> Client: getSelection()
+alt Client is null
+    MainWindowController -> MainWindowController: showAlert("No client selected")
+end
+
+MainWindowController -> NewBetWindowController: Open new bet window
+activate NewBetWindowController
+
+NewBetWindowController -> User: Display UI for bet details
+User -> NewBetWindowController: Enter team and amount
+NewBetWindowController -> Event: validate team
+NewBetWindowController -> Client: placeBet(Event, amount, team)
+alt Validation fails
+    NewBetWindowController -> MainWindowController: showAlert("Invalid team or amount")
+    return
+end
+
+NewBetWindowController -> Event: addBet(team, amount)
+NewBetWindowController -> MainWindowController: cancel()
+deactivate NewBetWindowController
+
+MainWindowController -> MainWindowController: update()
+MainWindowController -> User: Display new data
+deactivate MainWindowController
+@enduml

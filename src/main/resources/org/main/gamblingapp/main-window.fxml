@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.MainWindowController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.controllers.MainWindowController">
   <padding>
     <Insets bottom="10" left="10" right="10" top="10" />
   </padding>
@@ -19,6 +19,8 @@
          <children>
             <ComboBox fx:id="clientBox" prefWidth="150.0" promptText="Choose a client" />
             <ComboBox fx:id="categoryBox" prefWidth="150.0" promptText="Chose a category" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="82.0" text="Client Balance" />
+            <Label fx:id="balanceLabel" alignment="CENTER" prefHeight="25.0" prefWidth="90.0" text="0" />
          </children>
       </HBox>
 
@@ -40,13 +42,16 @@
         <TableColumn fx:id="betColumn" text="Bets" />
           <TableColumn fx:id="oddsColumn" text="Odds" />
           <TableColumn fx:id="finishedColumn" text="Time left" />
+          <TableColumn fx:id="clientBetColumn" text="Client's bet" />
       </columns>
     </TableView>
 
     <HBox alignment="CENTER" spacing="10">
       <Button onAction="#handlePlaceBet" text="Place Bet" />
       <Button onAction="#handleClearSelection" text="Clear Selection" />
-         <Button onAction="#handleCheckDate" mnemonicParsing="false" text="Check Date" />
+         <Button mnemonicParsing="false" onAction="#handleCheckDate" text="Check Date" />
+         <Button mnemonicParsing="false" onAction="#addBalance" text="Add Money" />
+         <Button onAction="#saveToFile" mnemonicParsing="false" text="Save" />
     </HBox>
   </children>
 </VBox>

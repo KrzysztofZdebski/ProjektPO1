@@ -1,9 +1,10 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.main.gamblingapp.model.Event;
 
 public class NewEventWindowController {
     @FXML
@@ -28,7 +29,7 @@ public class NewEventWindowController {
             String firstTeam = fisrtTeamTextField.getText();
             String secondTeam = secondTeamTextField.getText();
             String date = datePicker.getValue().toString();
-            if(eventName.isEmpty() || firstTeam.isEmpty() || secondTeam.isEmpty()) {throw new NullPointerException();}
+            if(eventName.isEmpty() || firstTeam.isEmpty() || secondTeam.isEmpty()) throw new NullPointerException();
             parentController.addEvent(new Event(eventName, date, new String[]{firstTeam, secondTeam}, new Integer[]{0,0}));
             cancel();
         }catch(NumberFormatException e){

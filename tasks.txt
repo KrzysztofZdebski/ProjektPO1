@@ -1,12 +1,5 @@
-Baza danych			Bartek
-	przykladowe dane
-Klasa Client			Bartek
-	na co ile postawil
 
 
-
-Saldo klienta
-Sprawdzanie daty ( wyplacanie pieniedzy)
 
 Promocje
 

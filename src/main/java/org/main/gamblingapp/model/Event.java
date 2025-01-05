@@ -1,16 +1,20 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.model;
 
-import Interfaces.Listener;
+import org.main.gamblingapp.exceptions.EventException;
+import org.main.gamblingapp.interfaces.Listener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.round;
 
@@ -26,8 +30,8 @@ public class Event {
     private boolean finished = false;
     private String timeLeft;
 
-    public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
-        if(participants.length != 2 || bet.length != 2) throw new IllegalArgumentException();
+    public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws EventException {
+        if(participants.length != 2 || bet.length != 2) throw new EventException("Wrong number of participants");
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDate = new SimpleStringProperty(eventDate);
         this.participants.addAll(FXCollections.observableArrayList(participants));
@@ -55,8 +59,9 @@ public class Event {
             odds.set(i, Math.min(maxOdds, calcOdds));
         }
     }
-    public void addBet(String participant, int bet) {
+    public void addBet(String participant, int bet) throws EventException {
         int participantIdx = participants.indexOf(participant);
+        if(participantIdx == -1) throw new EventException("Participant not found");
         this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
         countOdds();
         notifyListeners();
@@ -69,17 +74,24 @@ public class Event {
         timeLeft = Long.toString(today.until(date, ChronoUnit.DAYS));
         notifyListeners();
     }
-    public void addListener(Listener listener) {
-        listeners.add(listener);
-    }
-    public void removeListener(Listener listener) {
-        listeners.remove(listener);
-    }
+    public void addListener(Listener listener) {listeners.add(listener);}
+    public void removeListener(Listener listener) {listeners.remove(listener);}
     private void notifyListeners() {
         for (Listener listener : listeners) {
             listener.update();
         }
     }
+    public JSONObject toJSONObj() {
+        Map<String,String> map = new HashMap<>();
+        map.put("eventName", eventName.get());
+        map.put("eventDate", eventDate.get());
+        map.put("participant0", participants.getFirst());
+        map.put("participant1", participants.getLast());
+        map.put("bet0", betList().getFirst().toString());
+        map.put("bet1", betList().getLast().toString());
+        return new JSONObject(map);
+    }
+    public boolean equals(String str){return str.equals(eventName.get());}
 
     public StringProperty eventNameProperty() {return eventName;}
     public StringProperty eventDateProperty() {return eventDate;}
@@ -88,4 +100,5 @@ public class Event {
     public ObservableList<Double> oddsList() {return odds;}
     public boolean isFinished() {return finished;}
     public String getTimeLeft() {return timeLeft;}
+    public String getEventName() {return eventName.get();}
 }

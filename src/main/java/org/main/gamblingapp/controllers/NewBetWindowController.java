@@ -1,10 +1,13 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.main.gamblingapp.exceptions.EventException;
+import org.main.gamblingapp.model.Client;
+import org.main.gamblingapp.model.Event;
 
 public class NewBetWindowController {
     @FXML
@@ -14,17 +17,18 @@ public class NewBetWindowController {
 
     private MainWindowController parentController;
     private Event selectedEvent;
-    private String selectedClient;
+    private Client selectedClient;
 
     public void handleNewBet() {
         try{
             String team = teamBox.getSelectionModel().getSelectedItem();
             int betAmount = Integer.parseInt(betAmountTextField.getText());
-            if(!selectedEvent.participantsList().contains(team)){throw new IllegalArgumentException();}
-            parentController.addBet(selectedEvent, betAmount, team);
+            if(!selectedEvent.participantsList().contains(team)) throw new EventException("Invalid team name");
+            selectedClient.placeBet(selectedEvent, betAmount, team);
+            selectedEvent.addBet(team, betAmount);
             cancel();
         } catch (Exception e) {
-            parentController.showAlert("Invalid values", "Please enter a valid value");
+            parentController.showAlert(e.getMessage(), e.getMessage());
         }
     }
 
@@ -38,5 +42,5 @@ public class NewBetWindowController {
         this.selectedEvent = selectedEvent;
         teamBox.setItems(FXCollections.observableArrayList(selectedEvent.participantsList()));
     }
-    public void setSelectedClient(String selectedClient) {this.selectedClient = selectedClient;}
+    public void setSelectedClient(Client selectedClient) {this.selectedClient = selectedClient;}
 }

@@ -1,0 +1,37 @@
+@startuml
+actor User
+participant MainWindowController
+participant Category
+participant Event
+participant Client
+participant FileSystem
+
+User -> MainWindowController: saveToFile()
+activate MainWindowController
+
+MainWindowController -> Category: saveToFile()
+activate Category
+Category -> Event: toJSONObj()
+activate Event
+Event -> Category: Return data as a JSON object
+deactivate Event
+Category -> FileSystem: Write category data to file
+deactivate Category
+
+MainWindowController -> Client: toJSONObj()
+activate Client
+Client -> MainWindowController: Return data as a JSON object
+deactivate Client
+MainWindowController -> FileSystem: Write client data to file
+
+deactivate MainWindowController
+
+User -> MainWindowController: loadData()
+activate MainWindowController
+
+MainWindowController -> FileSystem: Read client and category data
+MainWindowController -> Client: Populate clients from data
+MainWindowController -> Category: Populate categories from data
+
+deactivate MainWindowController
+@enduml
