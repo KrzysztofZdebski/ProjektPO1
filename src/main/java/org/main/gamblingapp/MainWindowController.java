@@ -356,7 +356,7 @@ public class MainWindowController implements Listener {
             for (Client client : clients) {
                 clientsArray.add(client.toJSONObj());
             }
-            file.write(clientsArray.toString());
+            file.write(clientsArray.toJSONString());
             file.flush();
         }
     }

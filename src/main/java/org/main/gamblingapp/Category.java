@@ -3,6 +3,7 @@ package org.main.gamblingapp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,8 +29,7 @@ public class Category {
             jsonArray.add(event.toJSONObj());
         }
         try(FileWriter file = new FileWriter("src/main/resources/Database/" + categoryName + ".json")){
-            file.write(jsonArray.toJSONString());
-            file.flush();
+            JSONValue.writeJSONString(jsonArray, file);
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -62,6 +62,7 @@ public class Event {
     public void addBet(String participant, int bet) throws IllegalArgumentException {
         int participantIdx = participants.indexOf(participant);
         if(participantIdx == -1) throw new IllegalArgumentException();
+
         this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
         countOdds();
         notifyListeners();
