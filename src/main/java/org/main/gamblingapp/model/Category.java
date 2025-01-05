@@ -1,4 +1,4 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,10 +12,10 @@ public class Category {
     private ObservableList<Event> events = FXCollections.observableArrayList();
     private String categoryName;
 
-    Category(String categoryName) {
+    public Category(String categoryName) {
         this.categoryName = categoryName;
     }
-    Category(String categoryName, ObservableList<Event> events) {
+    public Category(String categoryName, ObservableList<Event> events) {
         this.categoryName = categoryName;
         this.events = events;
     }

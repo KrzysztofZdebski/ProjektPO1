@@ -1,7 +1,7 @@
-package org.main.gamblingapp;
-import Interfaces.Listener;
+package org.main.gamblingapp.model;
+import org.main.gamblingapp.exceptions.ClientException;
+import org.main.gamblingapp.interfaces.Listener;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,14 +26,23 @@ public class Client implements Listener {
         return clientAccBalance;
     }
     public List<Bet> getBets() {return bets;}
-    public void placeBet(Event event, int amount, String team) throws IllegalArgumentException {
+    public void placeBet(Event event, int amount, String team) throws ClientException {
         if (amount > clientAccBalance) {
 //            System.out.println("You don't have enough money to make a bet");
-            throw new IllegalArgumentException("Amount must be lower than the client balance");
-        } else {
-            clientAccBalance -= amount;
-            bets.add(new Bet(event, amount, team));
+            throw new ClientException("Amount must be lower than the client balance");
         }
+        for (Bet bet : bets) {
+            if (bet.getEvent().equals(event.getEventName())) {
+                if(!bet.getTeam().equals(team)) {
+                    throw new ClientException("Bet does not match the team");
+                }
+                clientAccBalance -= amount;
+                bet.increaseBet(amount);
+                return;
+            }
+        }
+        clientAccBalance -= amount;
+        bets.add(new Bet(event, amount, team));
     }
     public void addBalance(int amount) {
         clientAccBalance += amount;
@@ -54,7 +63,7 @@ public class Client implements Listener {
     public void update(){
         for(Bet bet : bets) {
             if(bet.getEvent().isFinished()){
-                addBalance(bet.getAmount());
+                addBalance((int) (bet.getAmount() * bet.getEvent().oddsList().get(bet.getEvent().participantsList().indexOf(bet.getTeam()))));
                 bets.remove(bet);
             }
         }

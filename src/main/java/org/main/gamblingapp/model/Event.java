@@ -1,12 +1,12 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.model;
 
-import Interfaces.Listener;
+import org.main.gamblingapp.exceptions.EventException;
+import org.main.gamblingapp.interfaces.Listener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,8 +30,8 @@ public class Event {
     private boolean finished = false;
     private String timeLeft;
 
-    public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws IllegalArgumentException {
-        if(participants.length != 2 || bet.length != 2) throw new IllegalArgumentException();
+    public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws EventException {
+        if(participants.length != 2 || bet.length != 2) throw new EventException("Wrong number of participants");
         this.eventName = new SimpleStringProperty(eventName);
         this.eventDate = new SimpleStringProperty(eventDate);
         this.participants.addAll(FXCollections.observableArrayList(participants));
@@ -59,10 +59,9 @@ public class Event {
             odds.set(i, Math.min(maxOdds, calcOdds));
         }
     }
-    public void addBet(String participant, int bet) throws IllegalArgumentException {
+    public void addBet(String participant, int bet) throws EventException {
         int participantIdx = participants.indexOf(participant);
-        if(participantIdx == -1) throw new IllegalArgumentException();
-
+        if(participantIdx == -1) throw new EventException("Participant not found");
         this.bet.set(participantIdx, this.bet.get(participantIdx) + bet);
         countOdds();
         notifyListeners();

@@ -1,4 +1,4 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.model;
 
 public class Bet {
     private Event event;
@@ -11,6 +11,7 @@ public class Bet {
         this.team = team;
     }
 
+    public void increaseBet(int amount){this.amount += amount;}
     public Event getEvent() {
         return event;
     }

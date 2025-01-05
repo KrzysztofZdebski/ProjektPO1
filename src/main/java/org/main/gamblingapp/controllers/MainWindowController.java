@@ -1,6 +1,6 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.controllers;
 
-import Interfaces.Listener;
+import org.main.gamblingapp.interfaces.Listener;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.main.gamblingapp.model.Bet;
+import org.main.gamblingapp.model.Category;
+import org.main.gamblingapp.model.Client;
+import org.main.gamblingapp.model.Event;
 
 
 public class MainWindowController implements Listener {
@@ -277,10 +281,10 @@ public class MainWindowController implements Listener {
         update();
     }
 
-    public void addBet(Event event, int bet, String team) throws IllegalArgumentException{
-        event.addBet(team, bet);
-        update();
-    }
+//    public void addBet(Event event, int bet, String team) throws IllegalArgumentException{
+//        event.addBet(team, bet);
+//        update();
+//    }
 
     public void handleCheckDate() {
         for(Category category : categories) {
@@ -288,6 +292,7 @@ public class MainWindowController implements Listener {
                 event.checkDate();
             }
         }
+        update();
     }
     public void loadData() {
         try{
@@ -347,7 +352,7 @@ public class MainWindowController implements Listener {
             update();
         });
     }
-    public void saveToFile() throws IOException {
+    public void saveToFile() {
         for(Category category : categories) {
             category.saveToFile();
         }
@@ -358,6 +363,8 @@ public class MainWindowController implements Listener {
             }
             file.write(clientsArray.toJSONString());
             file.flush();
+        }catch (IOException e) {
+            showAlert(e.getMessage(), "Failed to save data.");
         }
     }
 }

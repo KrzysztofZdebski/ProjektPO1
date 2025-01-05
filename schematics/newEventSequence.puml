@@ -1,0 +1,25 @@
+@startuml
+actor User
+participant MainWindowController
+participant NewEventWindowController
+participant Event
+participant Category
+
+User -> MainWindowController: handleNewEvent()
+activate MainWindowController
+
+MainWindowController -> NewEventWindowController: Open event creation window
+activate NewEventWindowController
+
+User -> NewEventWindowController: Enter event details
+NewEventWindowController -> Event: Create new Event instance
+
+NewEventWindowController -> MainWindowController: Pass new Event instance
+deactivate NewEventWindowController
+
+MainWindowController -> Category: addEvent(new Event)
+MainWindowController -> MainWindowController: update()
+MainWindowController -> User: Display new data
+
+deactivate MainWindowController
+@enduml

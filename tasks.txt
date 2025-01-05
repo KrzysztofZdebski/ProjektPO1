@@ -1,4 +1,3 @@
-add a check if client already bet on this team
 
 
 

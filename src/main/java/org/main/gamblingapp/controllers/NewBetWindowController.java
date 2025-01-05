@@ -1,10 +1,13 @@
-package org.main.gamblingapp;
+package org.main.gamblingapp.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.main.gamblingapp.exceptions.EventException;
+import org.main.gamblingapp.model.Client;
+import org.main.gamblingapp.model.Event;
 
 public class NewBetWindowController {
     @FXML
@@ -20,14 +23,12 @@ public class NewBetWindowController {
         try{
             String team = teamBox.getSelectionModel().getSelectedItem();
             int betAmount = Integer.parseInt(betAmountTextField.getText());
-            if(!selectedEvent.participantsList().contains(team)) throw new IllegalArgumentException();
+            if(!selectedEvent.participantsList().contains(team)) throw new EventException("Invalid team name");
             selectedClient.placeBet(selectedEvent, betAmount, team);
-            parentController.addBet(selectedEvent, betAmount, team);
+            selectedEvent.addBet(team, betAmount);
             cancel();
-        } catch(IllegalArgumentException e){
-            parentController.showAlert("Not enough founds","Not enough founds");
         } catch (Exception e) {
-            parentController.showAlert("Invalid values", "Please enter a valid value");
+            parentController.showAlert(e.getMessage(), e.getMessage());
         }
     }
 

@@ -1,85 +1,107 @@
 @startuml
-
-' Class Diagram
 class MainWindowController {
-  + ComboBox<Category> categoryBox
-  + TableView<Event> eventsTable
-  + ObservableList<Category> categories
-  + ObservableList<Event> events
-  + ObservableList<String> clients
-  + String selectedClient
-  --
-  +  initialize()
-  +  handlePlaceBet()
-  +  handleClearSelection()
-  +  handleAddClient()
-  +  handleRemoveClient()
-  +  handleNewEvent()
-  +  handleRemoveEvent()
-  +  handleNewCategory()
-  +  showAlert(String title, String content)
-  +  update()
-  +  addEvent(Event event)
-  +  addBet(Event event, int bet, String team)
+    - Label balanceLabel
+    - ComboBox<Category> categoryBox
+    - TableView<Event> eventsTable
+    - ObservableList<Category> categories
+    - ObservableList<Event> events
+    - ObservableList<Client> clients
+    - Client selectedClient
+    +  initialize()
+    +  handlePlaceBet()
+    +  handleClearSelection()
+    +  handleAddClient()
+    +  handleRemoveClient()
+    +  addEvent(Event event)
+    +  showAlert(String title, String content)
+    +  update()
+    +  saveToFile()
 }
 
 class NewBetWindowController {
-  + ComboBox<String> teamBox
-  + TextField betAmountTextField
-  + MainWindowController parentController
-  + Event selectedEvent
-  + String selectedClient
-  --
-  +  handleNewBet()
-  +  cancel()
-  +  setMainWindowController(MainWindowController controller)
-  +  setSelectedEvent(Event event)
-  +  setSelectedClient(String client)
+    - ComboBox<String> teamBox
+    - TextField betAmountTextField
+    - MainWindowController parentController
+    - Event selectedEvent
+    - Client selectedClient
+    +  handleNewBet()
+    +  cancel()
+    +  setParentController(MainWindowController controller)
+    +  setSelectedEvent(Event event)
+    +  setSelectedClient(Client client)
 }
 
 class NewEventWindowController {
-  + TextField eventNameTextField
-  + TextField fisrtTeamTextField
-  + TextField secondTeamTextField
-  + DatePicker datePicker
-  + MainWindowController parentController
-  --
-  +  cancel()
-  +  createEvent()
-  +  setParentController(MainWindowController controller)
+    - TextField eventNameTextField
+    - TextField fisrtTeamTextField
+    - TextField secondTeamTextField
+    - DatePicker datePicker
+    - MainWindowController parentController
+    +  createEvent()
+    +  cancel()
+    +  setParentController(MainWindowController controller)
 }
 
-class Event {
-  + StringProperty eventName
-  + StringProperty eventDate
-  + ObservableList<String> participants
-  + ObservableList<Integer> bet
-  + ObservableList<Double> odds
-  + List<Listener> listeners
-  - final double maxOdds
-  - final double ownerMargin
-  --
-  +  addBet(String participant, int bet)
-  +  addListener(Listener listener)
-  +  removeListener(Listener listener)
-  + StringProperty eventNameProperty()
+class Client {
+    - String clientName
+    - int clientAccBalance
+    - List<Bet> bets
+    + String getClientName()
+    + int getClientAccBalance()
+    +  placeBet(Event event, int amount, String team)
+    +  addBalance(int amount)
+    +  update()
+    + JSONObject toJSONObj()
+}
+
+class Bet {
+    - Event event
+    - int amount
+    - String team
+    + Bet(Event event, int amount, String team)
+    + Event getEvent()
+    + int getAmount()
+    + String getTeam()
+    +  increaseBet(int amount)
 }
 
 class Category {
-  + ObservableList<Event> events
-  + String categoryName
-  --
-  +  equals(String str)
-  +  getCategoryName()
-  +  getEvents()
+    - ObservableList<Event> events
+    - String categoryName
+    + String getCategoryName()
+    + ObservableList<Event> getEvents()
+    +  saveToFile()
 }
 
-MainWindowController --> NewBetWindowController : uses
-MainWindowController --> NewEventWindowController : uses
-MainWindowController --> Event : manages
-MainWindowController --> Category : manages
-NewBetWindowController --> Event : updates
-NewEventWindowController --> Event : creates
-Category --> Event : contains
+class Event {
+    - StringProperty eventName
+    - StringProperty eventDate
+    - ObservableList<String> participants
+    - ObservableList<Integer> bet
+    - ObservableList<Double> odds
+    - boolean finished
+    + Event(String eventName, String eventDate, String[] participants, Integer[] bet)
+    + String getEventName()
+    +  addBet(String participant, int bet)
+    + boolean isFinished()
+    + JSONObject toJSONObj()
+}
 
+interface Listener {
+    +  update()
+}
+
+MainWindowController o--> Listener
+MainWindowController --> Category
+MainWindowController --> Client
+MainWindowController --> Event
+NewBetWindowController --> MainWindowController
+NewBetWindowController --> Event
+NewBetWindowController --> Client
+NewEventWindowController --> MainWindowController
+Client --> Bet
+Client --> Event
+Client o--> Listener
+Category --> Event
+Bet --> Event
 @enduml
