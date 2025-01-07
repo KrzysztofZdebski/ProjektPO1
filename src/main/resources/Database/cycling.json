@@ -1,10 +1,1 @@
-[
-    {
-        "eventName": "Cycling Tour",
-        "eventDate": "2025-06-20",
-        "participant0": "Cyclist A",
-        "bet0": 200,
-        "participant1": "Cyclist B",
-        "bet1": 250
-    }
-]
+[{"participant1":"Cyclist B","bet0":"210","eventName":"Cycling Tour","participant0":"Cyclist A","bet1":"250","eventDate":"2025-06-20"}]

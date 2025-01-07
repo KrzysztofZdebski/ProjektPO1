@@ -1,18 +1,1 @@
-[
-        {
-          "eventName": "Basketball Championship",
-          "eventDate": "2025-03-20",
-          "participant0": "Team X",
-          "bet0": 4500,
-          "participant1": "Team Y",
-          "bet1": 2600
-        },
-        {
-          "eventName": "Basketball Playoffs",
-          "eventDate": "2025-02-10",
-          "participant0": "Team Z",
-          "bet0": 3500,
-          "participant1": "Team W",
-          "bet1": 4000
-        }
-]
+[{"participant1":"Team Y","bet0":"4500","eventName":"Basketball Championship","participant0":"Team X","bet1":"2600","eventDate":"2025-03-20"},{"participant1":"Team W","bet0":"3500","eventName":"Basketball Playoffs","participant0":"Team Z","bet1":"4000","eventDate":"2025-02-10"}]

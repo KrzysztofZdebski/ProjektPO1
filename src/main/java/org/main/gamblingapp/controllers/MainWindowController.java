@@ -130,7 +130,6 @@ public class MainWindowController implements Listener {
         });
 
         categoryBox.setItems(categories);
-        categoryBox.getSelectionModel().select(categories.getFirst());
         categoryBox.setOnAction(_ -> update());
         categoryBox.setCellFactory(new Callback<>() {
             @Override
@@ -266,7 +265,9 @@ public class MainWindowController implements Listener {
     }
 
     public void update() {
-        events = categoryBox.getValue().getEvents();
+        if(categoryBox.getValue() != null) {
+            events = categoryBox.getValue().getEvents();
+        }
         selectedClient = clientBox.getSelectionModel().getSelectedItem();
         eventsTable.setItems(events);
         eventsTable.refresh();
@@ -435,22 +436,36 @@ public class MainWindowController implements Listener {
                 int clientAccBalance = Integer.parseInt(jsonObject.get("clientAccBalance").toString());
                 Client client = new Client(clientName, clientAccBalance);
 
-                for (Object keyObj : jsonObject.keySet()) {
-                    String key = (String) keyObj;
-                    if (!key.equals("clientName") && !key.equals("clientAccBalance")) {
-                        String eventName = key;
-                        int betAmount = Integer.parseInt(jsonObject.get(key).toString());
-
-                        Event event = eventMap.get(eventName);
-                        if (event != null) {
-                            Bet bet = new Bet(event, betAmount, "Unknown");
-                            client.getBets().add(bet);
-                            event.addListener(client);
-                        } else {
-                            System.err.println("Event not found for bet: " + eventName);
-                        }
+                JSONArray bets = (JSONArray) jsonObject.get("bets");
+                for (Object bet : bets) {
+                    JSONObject betObject = (JSONObject) bet;
+                    String eventName = (String) betObject.get("eventName");
+                    int betAmount = Integer.parseInt(betObject.get("amount").toString());
+                    String betTeam = (String) betObject.get("team");
+                    Event event = eventMap.get(eventName);
+                    if (event != null) {
+                        client.getBets().add(new Bet(event, betAmount, betTeam));
+                        event.addListener(client);
+                    } else {
+                        showAlert("Event not found", "Event not found for bet: " + eventName);
                     }
                 }
+//                for (Object keyObj : jsonObject.keySet()) {
+//                    String key = (String) keyObj;
+//                    if (!key.equals("clientName") && !key.equals("clientAccBalance")) {
+//                        String eventName = key;
+//                        int betAmount = Integer.parseInt(jsonObject.get(key).toString());
+//
+//                        Event event = eventMap.get(eventName);
+//                        if (event != null) {
+//                            Bet bet = new Bet(event, betAmount, "Unknown");
+//                            client.getBets().add(bet);
+//                            event.addListener(client);
+//                        } else {
+//                            System.err.println("Event not found for bet: " + eventName);
+//                        }
+//                    }
+//                }
                 clients.add(client);
             }
         } catch (Exception e) {

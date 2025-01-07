@@ -1,4 +1,5 @@
 package org.main.gamblingapp.model;
+import org.json.simple.JSONArray;
 import org.main.gamblingapp.exceptions.ClientException;
 import org.main.gamblingapp.interfaces.Listener;
 import org.json.simple.JSONObject;
@@ -61,21 +62,25 @@ public class Client implements Listener {
         return this.clientName.equals(clientName);
     }
     public void update(){
+        ArrayList<Bet> betsToRemove = new ArrayList<>();
         for(Bet bet : bets) {
             if(bet.getEvent().isFinished()){
                 addBalance((int) (bet.getAmount() * bet.getEvent().oddsList().get(bet.getEvent().participantsList().indexOf(bet.getTeam()))));
-                bets.remove(bet);
+                betsToRemove.add(bet);
             }
         }
+        bets.removeAll(betsToRemove);
     }
     public JSONObject toJSONObj() {
-        Map<String,String> map = new HashMap<>();
-        map.put("clientName", clientName);
-        map.put("clientAccBalance", String.valueOf(clientAccBalance));
+        JSONObject obj = new JSONObject();
+        obj.put("clientName", clientName);
+        obj.put("clientAccBalance", String.valueOf(clientAccBalance));
+        JSONArray betArray = new JSONArray();
         for(Bet bet : bets) {
-            map.put(bet.getEvent().getEventName(), String.valueOf(bet.getAmount()));
+            betArray.add(bet.toJSONObj());
         }
-        return new JSONObject(map);
+        obj.put("bets", betArray);
+        return obj;
     }
 }
 

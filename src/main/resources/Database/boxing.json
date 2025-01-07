@@ -1,18 +1,1 @@
-[
-        {
-          "eventName": "Boxing Match",
-          "eventDate": "2025-12-05",
-          "participant0": "Fighter A",
-          "bet0": 200,
-          "participant1": "Fighter B",
-          "bet1": 300
-        },
-        {
-          "eventName": "Boxing World Title",
-          "eventDate": "2025-01-13",
-          "participant0": "Fighter C",
-          "bet0": 1621,
-          "participant1": "Fighter D",
-          "bet1": 4122
-        }
-]
+[{"participant1":"Fighter B","bet0":"200","eventName":"Boxing Match","participant0":"Fighter A","bet1":"300","eventDate":"2025-12-05"},{"participant1":"Fighter D","bet0":"1621","eventName":"Boxing World Title","participant0":"Fighter C","bet1":"4122","eventDate":"2025-01-13"}]

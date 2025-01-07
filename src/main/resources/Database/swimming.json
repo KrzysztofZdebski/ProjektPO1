@@ -1,18 +1,1 @@
-[
-  {
-    "eventName": "Swimming Finals",
-    "eventDate": "2025-04-12",
-    "participant0": "Swimmer C",
-    "bet0": 220,
-    "participant1": "Swimmer D",
-    "bet1": 270
-  },
-  {
-    "eventName": "Swimming Championship",
-    "eventDate": "2025-04-30",
-    "participant0": "Swimmer A",
-    "bet0": 250,
-    "participant1": "Swimmer B",
-    "bet1": 300
-  }
-]
+[{"participant1":"Swimmer D","bet0":"220","eventName":"Swimming Finals","participant0":"Swimmer C","bet1":"270","eventDate":"2025-04-12"},{"participant1":"Swimmer B","bet0":"250","eventName":"Swimming Championship","participant0":"Swimmer A","bet1":"300","eventDate":"2025-04-30"}]
