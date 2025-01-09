@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="525.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.controllers.MainWindowController">
+<VBox prefHeight="525.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.gamblingapp.controllers.MainWindowController">
   <padding>
     <Insets bottom="10" left="10" right="10" top="10" />
   </padding>
@@ -41,8 +41,8 @@
         <TableColumn fx:id="participantsColumn" prefWidth="170.0" text="Participants" />
         <TableColumn fx:id="betColumn" text="Bets" />
           <TableColumn fx:id="oddsColumn" prefWidth="70.0" text="Odds" />
-          <TableColumn fx:id="finishedColumn" prefWidth="70.0" text="Time left" />
-          <TableColumn fx:id="clientBetColumn" prefWidth="91.0" text="Client's bet" />
+          <TableColumn fx:id="finishedColumn" prefWidth="123.0" text="Time left / Winner" />
+          <TableColumn fx:id="clientBetColumn" prefWidth="38.0" text="Client's bet" />
       </columns>
     </TableView>
 

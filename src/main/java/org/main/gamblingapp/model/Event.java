@@ -11,10 +11,7 @@ import org.json.simple.JSONObject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.round;
 
@@ -29,6 +26,7 @@ public class Event {
     private final double ownerMargin = 1.05;
     private boolean finished = false;
     private String timeLeft;
+    private String winner = null;
 
     public Event(String eventName, String eventDate, String[] participants, Integer[] bet) throws EventException {
         if(participants.length != 2 || bet.length != 2) throw new EventException("Wrong number of participants");
@@ -72,6 +70,8 @@ public class Event {
         LocalDate date = LocalDate.parse(eventDate.get(), formatter);
         finished = today.isAfter(date);
         timeLeft = Long.toString(today.until(date, ChronoUnit.DAYS));
+        Random random = new Random();
+        winner = participants.get(random.nextInt(participants.size()));
         notifyListeners();
     }
     public void addListener(Listener listener) {listeners.add(listener);}
@@ -101,4 +101,5 @@ public class Event {
     public boolean isFinished() {return finished;}
     public String getTimeLeft() {return timeLeft;}
     public String getEventName() {return eventName.get();}
+    public String getWinner() {return winner;}
 }

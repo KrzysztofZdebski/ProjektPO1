@@ -64,7 +64,7 @@ public class Client implements Listener {
     public void update(){
         ArrayList<Bet> betsToRemove = new ArrayList<>();
         for(Bet bet : bets) {
-            if(bet.getEvent().isFinished()){
+            if(bet.getEvent().isFinished() && bet.getTeam().equals(bet.getEvent().getWinner())) {
                 addBalance((int) (bet.getAmount() * bet.getEvent().oddsList().get(bet.getEvent().participantsList().indexOf(bet.getTeam()))));
                 betsToRemove.add(bet);
             }
