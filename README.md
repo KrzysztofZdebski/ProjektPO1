@@ -46,13 +46,18 @@ Upon running the application:
 ProjektPO1/
 ├── src/
 │   └── main/
-│       └── java/
-│           └── com/
-│               └── example/
-│                   ├── Main.java
-│                   ├── controllers/
-│                   ├── models/
-│                   └── views/
+│       ├── java/
+│       │   └── com/
+│       │       └── example/
+│       │           ├── Main.java
+│       │           ├── controllers/
+│       │           ├── models/
+│       │           └── views/
+│       └── resources/
+│           ├── config.properties
+│           └── data/
+│               ├── events.json
+│               └── users.json
 ├── pom.xml
 └── README.md
 ```
@@ -61,14 +66,7 @@ ProjektPO1/
 - **models/**: Defines the data structures and business logic.
 - **views/**: Manages the user interface components.
 
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For any questions or feedback, please contact [Krzysztof Zdebski](mailto:krzysztof.zdebski@example.com).
+For any questions or feedback, please contact [Krzysztof Zdebski](mailto:km.zdebski@gmail.com).
